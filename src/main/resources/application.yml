@@ -3,10 +3,7 @@ server:
 
 spring:
     datasource:
-        driver-class-name: "com.mysql.cj.jdbc.Driver"
-        url: "jdbc:mysql://localhost:3306/qwe?serverTimezone=Asia/Seoul"
-        username: "root"
-        password: "0000"
+
     jpa:
         # JPA가 수행하는 SQL을 볼 수 있다.
         show-sql: true
@@ -23,7 +20,10 @@ spring:
         path match:
             matching-strategy: ant_path_matcher
 # 파라미터 확인을 위한 trace
-logging:
-    level:
-        org.hibernate.type: trace
+#logging:
+#    level:
+#        org.hibernate.type: trace
+jwt:
+
+Email:
 
