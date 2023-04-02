@@ -9,7 +9,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ComputerInfoDTO {
-
+public class DeviceInfoDTO {
+    // TODO: 이하 추가 할 DTO를 추가합니다.
     private String device;
+    private String macAddress;
+    private String ipAddress;
+
 }

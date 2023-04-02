@@ -1,6 +1,6 @@
 package com.pro.WOLmgr.controller;
 
-import com.pro.WOLmgr.dto.ComputerInfoDTO;
+import com.pro.WOLmgr.dto.DeviceInfoDTO;
 import org.springframework.web.bind.annotation.*;
 import org.apache.commons.lang3.NotImplementedException;
 
@@ -22,10 +22,10 @@ public class WolServiceController{
     }
 
     @PostMapping("/computerInfoRegister")
-    public String computerInfo(ComputerInfoDTO computerInfoDTO){
+    public String computerInfo(@RequestBody DeviceInfoDTO deviceInfoDTO){
         // TODO: 새로운 디바이스를 등록하는 로직을 추가합니다.
         new NotImplementedException("구현이 되지 않은 서비스입니다.");
-        return computerInfoDTO.getDevice();
+        return deviceInfoDTO.getDevice();
     }
 
     @DeleteMapping("/deleteNum/{num}")
