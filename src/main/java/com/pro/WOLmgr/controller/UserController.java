@@ -27,6 +27,9 @@ public class UserController {
     @GetMapping("/wol/login")
     public void login(){}
 
+    @GetMapping("/")
+    public String index() { return "/wol/login"; }
+
     //이메일 인증
     @PostMapping("/mailSendNum") // 메일 유효성 검사
     public @ResponseBody HashMap<String,String> mailSendNum(@RequestBody HashMap<String,String> params) {
