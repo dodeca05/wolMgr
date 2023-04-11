@@ -17,8 +17,4 @@ spring:
     mvc:
         path match:
             matching-strategy: ant_path_matcher
-# 파라미터 확인을 위한 trace
-logging:
-    level:
-        org.hibernate.type: trace
 
