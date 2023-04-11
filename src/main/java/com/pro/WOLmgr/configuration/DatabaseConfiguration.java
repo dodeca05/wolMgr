@@ -14,9 +14,7 @@ import javax.sql.DataSource;
 @PropertySource("classpath:application.yml")
 @RequiredArgsConstructor
 public class DatabaseConfiguration {
-
-    private Environment env;
-
+    private final Environment env;
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
