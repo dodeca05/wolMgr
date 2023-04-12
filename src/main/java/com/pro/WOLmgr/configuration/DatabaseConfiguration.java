@@ -1,5 +1,6 @@
 package com.pro.WOLmgr.configuration;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,11 +12,9 @@ import javax.sql.DataSource;
 
 @Configuration
 @PropertySource("classpath:application.yml")
+@RequiredArgsConstructor
 public class DatabaseConfiguration {
-
-    @Autowired
-    private Environment env;
-
+    private final Environment env;
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
