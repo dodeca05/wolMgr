@@ -10,24 +10,12 @@ import java.net.UnknownHostException;
 @Log4j2
 @Service
 public class HealthCheckService {
-
-    public void healthCheck() {
-      boolean healthCheckStatus = healthCheck("175.123.128.90");
-
-      if (healthCheckStatus) {
-          //핑테스트 성공
-          log.info("컴퓨터가 켜져있습니다.");
-      } else {
-          //핑테스트 실패
-          log.info("컴퓨터가 꺼져있거나 응답이 없습니다.");
-      }
-    }
-
     public boolean healthCheck(String ip) {
         boolean result = false;
 
         try {
             //InetAddress.getByName() 메소드는 도메인 이름 또는 IP 주소를 이용하여 InetAddress 객체를 생성하는 메소드
+            //유효하지 않은 ip나 호스트를 잡기 위한것
             InetAddress inetAddress = InetAddress.getByName(ip);
             //InetAddress inetAddress = InetAddress.getByAddress(ip, new byte[]{(byte) 175, (byte) 123, (byte) 128, (byte) 92});
             // 만약 ip만 들어온다면 위 주석처리한 코드도 사용가능
