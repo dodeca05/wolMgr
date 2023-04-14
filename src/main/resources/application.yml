@@ -21,3 +21,6 @@ jwt:
 
 Email:
 
+emailPath:
+    template: /templates/Wol/registerForm.html
+

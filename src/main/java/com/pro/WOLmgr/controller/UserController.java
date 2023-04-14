@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 
 @Controller
@@ -29,7 +31,8 @@ public class UserController {
 
     //이메일 인증
     @PostMapping("/mailSendNum") // 메일 유효성 검사
-    public @ResponseBody HashMap<String,String> mailSendNum(@RequestBody HashMap<String,String> params) {
+    public @ResponseBody HashMap<String,String> mailSendNum(@RequestBody HashMap<String,String> params)
+            throws MessagingException, IOException {
         HashMap<String,String> result = new HashMap<>();
         String email = params.get("email").toString();
         result.put("checkNumber",mailService.joinEmail(email));
