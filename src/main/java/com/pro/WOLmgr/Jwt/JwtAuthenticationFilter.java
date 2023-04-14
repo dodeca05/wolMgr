@@ -3,7 +3,6 @@ package com.pro.WOLmgr.Jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pro.WOLmgr.dto.UserDTO;
 import com.pro.WOLmgr.entity.User;
 import com.pro.WOLmgr.util.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -34,15 +33,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     // /login 요청을 하면 로그인 시도를 위해서 실행되는 함수
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         log.info("jwt 로그인 시도중");
 
         // 1. username, password 받아서
-        try {
 
             ObjectMapper om = new ObjectMapper();
-            User user = om.readValue(request.getInputStream(), User.class);
-            log.info(user);
+        User user = null;
+        try {
+            user = om.readValue(request.getInputStream(), User.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        log.info(user);
 
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(user.getUserId(),user.getPassword());
@@ -59,11 +62,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             // 권한 관리를 시큐리티가 대신 해주기 때문에 편하려고 해주는 것
             // jwt쓰기 때문에 세션을 만들 이유가 없지만 권한처리때문에 세션 사용함
 
-
             return authentication;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 
     // 위 메소드 실행 후 인증이 되면 이 함수 실행
@@ -72,7 +72,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
-                                            Authentication authResult) throws IOException, ServletException {
+                                            Authentication authResult) throws IOException {
 
         log.info("인증이 완료 됨");
 
@@ -81,7 +81,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         //RSA방식 아님 hash 암호방식
         String jwtToken = JWT.create()
                 .withSubject(principalDetails.getUsername()) // 의미 없음 토큰 이름
-                .withExpiresAt(new Date(System.currentTimeMillis()+1000*60*10)) // 만료시간 밀리초단위
+                .withExpiresAt(new Date(System.currentTimeMillis()+1000*60*60*24)) // 만료시간 밀리초단위
                 .withClaim("userId",principalDetails.getUser().getUserId()) // 유저 아이디 비공개 클레임 내가 넣고싶은거 암거나 넣으면 댐
                 .withClaim("userRole",principalDetails.getUser().getRoleList()) // 유저 권한
                 .withClaim("userNumber",principalDetails.getUser().getUserNumber()) // 유저 넘버
