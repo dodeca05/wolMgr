@@ -2,7 +2,10 @@ package com.pro.WOLmgr.dto;
 
 import com.pro.WOLmgr.entity.User;
 import com.pro.WOLmgr.util.Role;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
@@ -10,7 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDTO {
+public class UserPrivacyDTO {
 
     private Long userNumber;
     private String userId;
@@ -19,21 +22,8 @@ public class UserDTO {
     private String email;
     private Set<Role> roles;
 
-    // entity를 DTO로 변환함
-    public static UserDTO toDto(User user) {
-        return UserDTO
-                .builder()
-                .userNumber(user.getUserNumber())
-                .userId(user.getUserId())
-                .password(user.getPassword())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .roles(user.getRoles())
-                .build();
-    }
-
     // DTO를 entity로 변환함
-    public static User toEntity(UserDTO dto) {
+    public static User toEntity(UserPrivacyDTO dto) {
         return User
                 .builder()
                 .userNumber(dto.getUserNumber())

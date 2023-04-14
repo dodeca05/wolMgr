@@ -5,7 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.pro.WOLmgr.entity.User;
 import com.pro.WOLmgr.repository.UserRepository;
 import com.pro.WOLmgr.util.PrincipalDetails;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;

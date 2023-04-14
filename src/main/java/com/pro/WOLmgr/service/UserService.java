@@ -1,6 +1,6 @@
 package com.pro.WOLmgr.service;
 
-import com.pro.WOLmgr.dto.UserDTO;
+import com.pro.WOLmgr.dto.UserPrivacyDTO;
 import com.pro.WOLmgr.entity.User;
 import com.pro.WOLmgr.repository.UserRepository;
 import com.pro.WOLmgr.util.Role;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.EnumSet;
 import java.util.Set;
 
-import static com.pro.WOLmgr.dto.UserDTO.toEntity;
+import static com.pro.WOLmgr.dto.UserPrivacyDTO.toEntity;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +22,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public Long register(UserDTO userDTO) {
+    public Long register(UserPrivacyDTO userDTO) {
         // 최초 회원가입때는 회원의 권한을 유저로 한정합니다.
         Set<Role> roles = EnumSet.of(Role.USER);
 

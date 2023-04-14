@@ -1,19 +1,16 @@
 package com.pro.WOLmgr.controller;
 
+import com.pro.WOLmgr.dto.UserPrivacyDTO;
 import com.pro.WOLmgr.service.MailService;
-import com.pro.WOLmgr.dto.UserDTO;
 import com.pro.WOLmgr.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 
@@ -40,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping("/join") // 회원가입
-    public @ResponseBody HashMap<String,String> join(@RequestBody UserDTO userDTO){
+    public @ResponseBody HashMap<String,String> join(@RequestBody UserPrivacyDTO userDTO){
         HashMap<String,String> result = new HashMap<>();
         userService.register(userDTO);
         result.put("result","회원가입 완료^^");

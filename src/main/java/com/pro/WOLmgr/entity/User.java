@@ -2,11 +2,9 @@ package com.pro.WOLmgr.entity;
 
 import com.pro.WOLmgr.util.Role;
 import lombok.*;
-import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
