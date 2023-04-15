@@ -45,10 +45,8 @@ public class MailService {
     private String getEmailTemplate() throws IOException {
         String template = "";
         String emailTemplate = env.getProperty("emailPath.template");
-        log.info(emailTemplate);
         // 클래스패스(Classpath)에서 템플릿 파일을 읽어옴
         InputStream inputStream = getClass().getResourceAsStream(emailTemplate);
-        log.info(inputStream);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
         String line;
         while ((line = reader.readLine()) != null) {

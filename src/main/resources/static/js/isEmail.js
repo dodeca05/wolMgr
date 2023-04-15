@@ -2,8 +2,6 @@ const signUpBox = document.querySelector(".sign-up-box");
 
 let isCheckId = false;
 let isCheckEmail = false;
-let isEmailNumberCheck = false;
-let authNum = null;
 
 signUpBox.addEventListener("click", handleClick, false);
 
@@ -18,8 +16,6 @@ function handleClick(event) {
         <input id="joinPassword" type="password" name="password" placeholder="Password"/>
         <input id="joinEmail" type="email" name="email" placeholder="Email"/>
         <button onclick="emailCheck();" type="button" class="btn btn-info mb">이메일 확인</button>
-        <input id="joinEmailNum" type="text" name="emailNum" placeholder="Authentication number"/>
-        <button onclick="emailNumCheck();" type="button" class="btn btn-info mb">인증번호 확인</button>
         <button onclick="event.stopPropagation(); handleSignUp();" >Sign up</button>
     `;
     this.classList.toggle("active");
@@ -56,10 +52,6 @@ function handleSignUp() {
 
     if (!isCheckEmail) {
         alert('이메일 중복확인을 해주세요.');
-    }
-
-    if (!isEmailNumberCheck) {
-        alert('이메일 인증번호 입력을 해주세요');
     }
 
     // 회원가입에 필요한 데이터 생성
@@ -105,36 +97,15 @@ function emailCheck() {
     ajaxForm('POST', '/emailCheck', data, function (result) {
         if (result.result === 'noContain') {
             isCheckEmail = true;
-            alert('이메일이 사용가능 합니다. 이 이메일로 인증번호를 발송했습니다. 확인해주세요.');
-            ajaxForm('POST', '/mailSendNum', data, function (result) {authNum = result.checkNumber;});
+            alert('이메일이 사용가능 합니다.');
+            $('#joinEmail').prop('readonly', true);
+            $('#joinEmail').css('background-color', 'gray');
         } else {
             alert('이메일이 중복입니다.');
             $('#joinEmail').val('');
             $('#joinEmail').focus();
         }
     });
-}
-
-// 이메일 랜덤번호 체크로직
-function emailNumCheck() {
-
-    let emailNum = $('#joinEmailNum').val();
-
-    let checkNumber = authNum;
-
-    if (emailNum == checkNumber) {
-        isEmailNumberCheck = true;
-        alert('인증되었습니다!');
-        $('#joinEmail').prop('readonly', true);
-        $('#joinEmailNum').prop('readonly', true);
-        $('#joinEmail').css('background-color', 'gray');
-        $('#joinEmailNum').css('background-color', 'gray');
-    } else {
-        alert('인증번호가 다릅니다. 다시 입력해주세요.');
-        $('#joinEmailNum').val('');
-        $('#joinEmailNum').focus();
-    }
-
 }
 
 // 로그인 로직

@@ -11,11 +11,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -38,7 +36,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         // 1. username, password 받아서
 
-            ObjectMapper om = new ObjectMapper();
+        ObjectMapper om = new ObjectMapper();
         User user = null;
         try {
             user = om.readValue(request.getInputStream(), User.class);
@@ -47,22 +45,22 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         }
         log.info(user);
 
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(user.getUserId(),user.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(user.getUserId(), user.getPassword());
 
-            // PrincipalDetailsService의 loadUserByUsername() 를 사용함
-            // DB에 있는 username과 password가 일치한다는 뜻
-            Authentication authentication =
-                    authenticationManager.authenticate(authenticationToken);
+        // PrincipalDetailsService의 loadUserByUsername() 를 사용함
+        // DB에 있는 username과 password가 일치한다는 뜻
+        Authentication authentication =
+                authenticationManager.authenticate(authenticationToken);
 
-            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-            log.info("로그인 완료 :"+principalDetails.getUser().getUserId()); // 로그인 되면 뜸
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        log.info("로그인 완료 :" + principalDetails.getUser().getUserId()); // 로그인 되면 뜸
 
-            // 세션에 authentication 이거 저장됨 => 로그인 되었다는 뜻
-            // 권한 관리를 시큐리티가 대신 해주기 때문에 편하려고 해주는 것
-            // jwt쓰기 때문에 세션을 만들 이유가 없지만 권한처리때문에 세션 사용함
+        // 세션에 authentication 이거 저장됨 => 로그인 되었다는 뜻
+        // 권한 관리를 시큐리티가 대신 해주기 때문에 편하려고 해주는 것
+        // jwt쓰기 때문에 세션을 만들 이유가 없지만 권한처리때문에 세션 사용함
 
-            return authentication;
+        return authentication;
 
     }
 
@@ -81,13 +79,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         //RSA방식 아님 hash 암호방식
         String jwtToken = JWT.create()
                 .withSubject(principalDetails.getUsername()) // 의미 없음 토큰 이름
-                .withExpiresAt(new Date(System.currentTimeMillis()+1000*60*60*24)) // 만료시간 밀리초단위
-                .withClaim("userId",principalDetails.getUser().getUserId()) // 유저 아이디 비공개 클레임 내가 넣고싶은거 암거나 넣으면 댐
-                .withClaim("userRole",principalDetails.getUser().getRoleList()) // 유저 권한
-                .withClaim("userNumber",principalDetails.getUser().getUserNumber()) // 유저 넘버
+                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 만료시간 밀리초단위
+                .withClaim("userId", principalDetails.getUser().getUserId()) // 유저 아이디 비공개 클레임 내가 넣고싶은거 암거나 넣으면 댐
+                .withClaim("userRole", principalDetails.getUser().getRoleList()) // 유저 권한
+                .withClaim("userNumber", principalDetails.getUser().getUserNumber()) // 유저 넘버
                 .sign(Algorithm.HMAC512(env.getProperty("jwt_secret"))); // 내 서버의 암호 암호는 서버가 마음대로 만들면됨
 
-        response.addHeader("Authorization","Bearer "+jwtToken);
+        response.addHeader("Authorization", "Bearer " + jwtToken);
 
         // JSON 형식의 문자열을 생성
         String jsonResponse = String.format("{\"Authorization\": \"Bearer %s\"}", jwtToken);

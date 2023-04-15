@@ -1,5 +1,6 @@
 package com.pro.WOLmgr.configuration;
 
+import com.pro.WOLmgr.util.CheckVariable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,7 @@ public class EmailConfiguration {
     private final Environment env;
 
     @Bean // Spring Bean으로 등록됨을 표시
-    public JavaMailSender getJavaMailSender() { // JavaMailSender 객체를 생성하는 메소드
+    public JavaMailSender getJavaMailSender() throws NullPointerException { // JavaMailSender 객체를 생성하는 메소드
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl(); // JavaMailSenderImpl 객체 생성
 
         mailSender.setHost("smtp.gmail.com"); // 메일 서버 호스트 설정
