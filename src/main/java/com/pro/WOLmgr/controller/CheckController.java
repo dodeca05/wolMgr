@@ -10,7 +10,7 @@ import java.util.HashMap;
 @RestController
 public class CheckController {
 
-    @GetMapping("/checkEamil")
+    @GetMapping("/checkEmail")
     public @ResponseBody HashMap<String,Boolean> isEmail(){
         HashMap<String,Boolean> result = new HashMap<>();
         if(CheckVariable.getInstance().isEmailSmtpCheck()) result.put("key",true);

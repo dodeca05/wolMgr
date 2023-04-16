@@ -73,7 +73,7 @@ function idCheck() {
 
     let data = { userId }
 
-    ajaxForm('POST', '/idCheck', data, function (result) {
+    ajaxForm('POST', '/id/duplication', data, function (result) {
         if (result.result === 'noContain') {
             isCheckId = true;
             alert('아이디가 사용가능 합니다.');
@@ -94,7 +94,7 @@ function emailCheck() {
 
     let data = { email }
 
-    ajaxForm('POST', '/emailCheck', data, function (result) {
+    ajaxForm('POST', '/email/duplication', data, function (result) {
         if (result.result === 'noContain') {
             isCheckEmail = true;
             alert('이메일이 사용가능 합니다.');
@@ -122,7 +122,7 @@ function login() {
 
     let data = { userId, password }
 
-    ajaxForm('POST', '/idCheck', data, function (result) {
+    ajaxForm('POST', '/id/duplication', data, function (result) {
         if (result.result === 'noContain') {
             alert('아이디가 존재하지 않습니다.');
             $('#loginUserid').val('');

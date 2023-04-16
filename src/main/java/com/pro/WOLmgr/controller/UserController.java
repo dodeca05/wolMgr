@@ -47,7 +47,7 @@ public class UserController {
         return result;
     }
 
-    @PostMapping("/idCheck") // 아이디 중복 체크
+    @PostMapping("/id/duplication") // 아이디 중복 체크
     public @ResponseBody HashMap<String,String> idCheck(@RequestBody HashMap<String,String> params){
 
         HashMap<String,String> result = new HashMap<>();
@@ -58,7 +58,7 @@ public class UserController {
         return result;
     }
 
-    @PostMapping("/emailCheck") // 이메일 중복 체크
+    @PostMapping("/email/duplication") // 이메일 중복 체크
     public @ResponseBody HashMap<String,String> emailCheck(@RequestBody HashMap<String,String> params){
 
         HashMap<String,String> result = new HashMap<>();
@@ -69,7 +69,7 @@ public class UserController {
         return result;
     }
 
-    @PostMapping("/authCheck")
+    @PostMapping("/auth/duplication")
     public @ResponseBody HashMap<String,String> example(@RequestBody HashMap<String,String> params,
                                           HttpServletResponse response) {
         HashMap<String,String> result = new HashMap<>();

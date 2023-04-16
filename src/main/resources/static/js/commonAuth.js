@@ -4,7 +4,7 @@ function authCheck() {
 
     let data = { Authorization }
 
-    ajaxForm('POST', '/authCheck', data);
+    ajaxForm('POST', '/auth/duplication', data);
 
 }
 
