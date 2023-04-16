@@ -1,34 +1,56 @@
 package com.pro.WOLmgr.configuration;
 
+import com.pro.WOLmgr.Jwt.JwtAuthenticationFilter;
+import com.pro.WOLmgr.Jwt.JwtAuthorizationFilter;
+import com.pro.WOLmgr.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
-@EnableWebSecurity // 스프링 시큐리티 필터가 스프링 필터체인에 등록됨
-@EnableGlobalMethodSecurity(securedEnabled = true, // secured 어노테이션 활성화 메서드 위에다가 한 권한에 권한 주는 것
-        prePostEnabled = true) // preAuthorize,postAuthorize(잘 안씀) 어노테이션 활성화 메서드 위에 여러권한에게 권한 주는것
+@EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
-    // 해당 메서드의 리턴부분을 의존성주입해줌
-    @Bean
-    public BCryptPasswordEncoder encoder(){
-        return new BCryptPasswordEncoder();
-    }
+    private final UserRepository userRepository;
+    private final Environment env;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.authorizeRequests()
-                .antMatchers("/**").permitAll() // 모든 경로에 대해 권한 없이 접근 가능하도록 수정
+        http.csrf().disable(); // CSRF 보안 설정 비활성화
+        // 세션 생성 정책 설정 (무상태 세션)
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .formLogin()
-                .loginPage("/loginForm")
-                .loginProcessingUrl("/login") // /login 주소가 호출이 되면 시큐리티가 낚아채서 대신 로그인을 진행함
-                .defaultSuccessUrl("/");
+                .formLogin().disable() // 폼 로그인 설정 비활성화
+                .httpBasic().disable() // HTTP 기본 인증 설정 비활성화
+                // JwtAuthenticationFilter 필터 추가 (AuthenticationManager 필요)
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(), env))
+                // JwtAuthorizationFilter 필터 추가 (AuthenticationManager, UserRepository 필요)
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository, env))
+                .authorizeRequests()
+                // "/user/**" 패턴에 대한 요청은
+                .antMatchers("/user/**")
+                // 'ROLE_USER', 'ROLE_MANAGER', 'ROLE_ADMIN' 권한을 가진 사용자만 접근 가능
+                .access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+                // "/manager/**" 패턴에 대한 요청은
+                .antMatchers("/manager/**")
+                // 'ROLE_MANAGER', 'ROLE_ADMIN' 권한을 가진 사용자만 접근 가능
+                .access("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+                // "/admin/**" 패턴에 대한 요청은
+                .antMatchers("/admin/**")
+                // 'ROLE_ADMIN' 권한을 가진 사용자만 접근 가능
+                .access("hasRole('ROLE_ADMIN')")
+                // 나머지 요청에 대해서는 모두 접근 가능
+                .anyRequest().permitAll();
+    }
+
+    @Bean // 패스워드 인코딩을 위한 의존성 설정
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
