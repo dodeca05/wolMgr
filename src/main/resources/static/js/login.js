@@ -78,10 +78,9 @@ function handleSignUp() {
 function idCheck() {
 
     let userId = $('#joinUserid').val();
+    let url = '/id/duplication?userId=' + userId
 
-    let data = { userId }
-
-    ajaxForm('POST', '/idCheck', data, function (result) {
+    ajaxForm('GET', url, null, function (result) {
         if (result.result === 'noContain') {
             isCheckId = true;
             alert('아이디가 사용가능 합니다.');
@@ -99,14 +98,14 @@ function idCheck() {
 function emailCheck() {
 
     let email = $('#joinEmail').val();
+    let url = '/email/duplication?email=' + email
+    let mailSendNumUrl = '/mailSendNum?email=' + email
 
-    let data = { email }
-
-    ajaxForm('POST', '/emailCheck', data, function (result) {
+    ajaxForm('GET', url, null, function (result) {
         if (result.result === 'noContain') {
             isCheckEmail = true;
             alert('이메일이 사용가능 합니다. 이 이메일로 인증번호를 발송했습니다. 확인해주세요.');
-            ajaxForm('POST', '/mailSendNum', data, function (result) {authNum = result.checkNumber;});
+            ajaxForm('GET', mailSendNumUrl, null, function (result) { authNum = result.checkNumber; });
         } else {
             alert('이메일이 중복입니다.');
             $('#joinEmail').val('');
@@ -125,10 +124,11 @@ function emailNumCheck() {
     if (emailNum == checkNumber) {
         isEmailNumberCheck = true;
         alert('인증되었습니다!');
-        $('#joinEmail').prop('readonly', true);
-        $('#joinEmailNum').prop('readonly', true);
         $('#joinEmail').css('background-color', 'gray');
         $('#joinEmailNum').css('background-color', 'gray');
+        $('#joinEmail').prop('readonly', true);
+        $('#joinEmailNum').prop('readonly', true);
+
     } else {
         alert('인증번호가 다릅니다. 다시 입력해주세요.');
         $('#joinEmailNum').val('');
@@ -142,7 +142,7 @@ function login() {
 
     let userId = $('#loginUserid').val();
     let password = $('#loginPassword').val();
-
+    let url = '/id/duplication?userId=' + userId
 
     // 로컬 스토리지 초기화
     let init = localStorage.setItem("Authorization", "");
@@ -151,7 +151,7 @@ function login() {
 
     let data = { userId, password }
 
-    ajaxForm('POST', '/idCheck', data, function (result) {
+    ajaxForm('GET', url, null, function (result) {
         if (result.result === 'noContain') {
             alert('아이디가 존재하지 않습니다.');
             $('#loginUserid').val('');

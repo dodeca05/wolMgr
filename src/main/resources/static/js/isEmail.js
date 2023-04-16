@@ -70,10 +70,9 @@ function handleSignUp() {
 function idCheck() {
 
     let userId = $('#joinUserid').val();
+    let url = '/id/duplication?userId='+userId
 
-    let data = { userId }
-
-    ajaxForm('POST', '/id/duplication', data, function (result) {
+    ajaxForm('GET', url, null, function (result) {
         if (result.result === 'noContain') {
             isCheckId = true;
             alert('아이디가 사용가능 합니다.');
@@ -91,10 +90,9 @@ function idCheck() {
 function emailCheck() {
 
     let email = $('#joinEmail').val();
+    let url = '/email/duplication?email='+email
 
-    let data = { email }
-
-    ajaxForm('POST', '/email/duplication', data, function (result) {
+    ajaxForm('GET', url, null, function (result) {
         if (result.result === 'noContain') {
             isCheckEmail = true;
             alert('이메일이 사용가능 합니다.');
@@ -113,7 +111,7 @@ function login() {
 
     let userId = $('#loginUserid').val();
     let password = $('#loginPassword').val();
-
+    let url = '/id/duplication?userId='+userId
 
     // 로컬 스토리지 초기화
     let init = localStorage.setItem("Authorization", "");
@@ -122,7 +120,7 @@ function login() {
 
     let data = { userId, password }
 
-    ajaxForm('POST', '/id/duplication', data, function (result) {
+    ajaxForm('GET', url, null, function (result) {
         if (result.result === 'noContain') {
             alert('아이디가 존재하지 않습니다.');
             $('#loginUserid').val('');

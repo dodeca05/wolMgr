@@ -15,7 +15,7 @@ public class CheckConfig {
     private final Environment env;
     @PostConstruct
     public void init() {
-        if(env.getProperty("1auth_email") == null||env.getProperty("auth_password") == null){
+        if(env.getProperty("auth_email") == null||env.getProperty("auth_password") == null){
             CheckVariable.getInstance().setEmailSmtpCheck(false);
             log.info("STMP 기능이 비활성화 되었습니다.");
         }

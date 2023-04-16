@@ -6,10 +6,7 @@ import com.pro.WOLmgr.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
@@ -30,11 +27,10 @@ public class UserController {
     public String index() { return "/wol/login"; }
 
     //이메일 인증
-    @PostMapping("/mailSendNum") // 메일 유효성 검사
-    public @ResponseBody HashMap<String,String> mailSendNum(@RequestBody HashMap<String,String> params)
+    @GetMapping("/mailSendNum") // 메일 유효성 검사
+    public @ResponseBody HashMap<String,String> mailSendNum(@RequestParam("email") String email)
             throws MessagingException, IOException {
         HashMap<String,String> result = new HashMap<>();
-        String email = params.get("email").toString();
         result.put("checkNumber",mailService.joinEmail(email));
         return result;
     }
@@ -47,22 +43,19 @@ public class UserController {
         return result;
     }
 
-    @PostMapping("/id/duplication") // 아이디 중복 체크
-    public @ResponseBody HashMap<String,String> idCheck(@RequestBody HashMap<String,String> params){
+    @GetMapping("/id/duplication") // 아이디 중복 체크
+    public @ResponseBody HashMap<String,String> idCheck(@RequestParam("userId") String userId){
 
         HashMap<String,String> result = new HashMap<>();
-        String userId = params.get("userId").toString();
         if (userService.idCheck(userId)){result.put("result","contain");}
         else{result.put("result","noContain");}
 
         return result;
     }
 
-    @PostMapping("/email/duplication") // 이메일 중복 체크
-    public @ResponseBody HashMap<String,String> emailCheck(@RequestBody HashMap<String,String> params){
-
+    @GetMapping("/email/duplication") // 이메일 중복 체크
+    public @ResponseBody HashMap<String,String> emailCheck(@RequestParam("email") String email){
         HashMap<String,String> result = new HashMap<>();
-        String email = params.get("email").toString();
         if (userService.emailCheck(email)){result.put("result","contain");}
         else{result.put("result","noContain");}
 
