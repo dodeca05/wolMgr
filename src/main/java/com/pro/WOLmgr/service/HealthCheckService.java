@@ -23,19 +23,19 @@ public class HealthCheckService {
             //isReachable() 메서드는 주어진 IP 주소 또는 호스트명의 호스트가 네트워크 상에서 도달 가능한지 여부를 확인하는 메서드
             if (inetAddress.isReachable(2000)) {
                 // 2초내에 핑이 테스트에 성공한경우 로그로 테스트 성공을 찍어주고 반환할 변수를 true 로 바꿔서 반환
-                log.info("ping test success");
+                log.info("핑 테스트 성공 IP : {} , 현재 컴퓨터가 켜져있는 상태입니다.", ip);
                 result = true;
             } else {
                 // 2초내에 핑이 테스트에 실패한경우로 로그로 핑 테스트 실패을 찍어주고 반환할 변수를 false 인 상태로 반환
                 // 핑 테스트 실패
-                log.info("ping test fail");
+                log.info("핑 테스트 실패 IP : {} , 현재 컴퓨터가 꺼져있는 상태입니다.", ip);
             }
         } catch (UnknownHostException e) {
             // 호스트나 IP 주소가 잘못되었을 때 예외 처리
-            e.printStackTrace();
+            log.error("IP주소가 잘못되었습니다. 발생한 IP : {}", ip, e);
         } catch (IOException e) {
             // 핑 테스트 중 예외 발생 시 예외 처리
-            e.printStackTrace();
+            log.error("핑 테스트중 예외 발생 IP : {}", ip, e);
         }
         //결과값 반환
         return result;
