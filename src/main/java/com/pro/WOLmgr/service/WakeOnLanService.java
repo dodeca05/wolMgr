@@ -3,7 +3,9 @@ package com.pro.WOLmgr.service;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 
 @Service
 public class WakeOnLanService {
