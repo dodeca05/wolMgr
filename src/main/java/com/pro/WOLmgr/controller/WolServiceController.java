@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Log4j2
 public class WolServiceController{
-    private final DeviceRepository deviceRepository;
-
     private final DeviceService deviceService;
 
     @PutMapping("/sendPacket/{packet}")
