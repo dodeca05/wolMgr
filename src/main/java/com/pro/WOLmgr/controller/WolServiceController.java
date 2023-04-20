@@ -1,11 +1,20 @@
 package com.pro.WOLmgr.controller;
 
 import com.pro.WOLmgr.dto.DeviceInfoDTO;
+import com.pro.WOLmgr.repository.DeviceRepository;
+import com.pro.WOLmgr.service.DeviceService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
+@Log4j2
 public class WolServiceController{
+    private final DeviceRepository deviceRepository;
+
+    private final DeviceService deviceService;
 
     @PutMapping("/sendPacket/{packet}")
     public String sendPacket(@PathVariable String packet) {
@@ -23,16 +32,17 @@ public class WolServiceController{
 
     @PostMapping("/computerInfoRegister")
     public String computerInfo(@RequestBody DeviceInfoDTO deviceInfoDTO){
-        // TODO: 새로운 디바이스를 등록하는 로직을 추가합니다.
-        new NotImplementedException("구현이 되지 않은 서비스입니다.");
-        return deviceInfoDTO.getDevice();
+        if(!deviceInfoDTO.getDeviceName().matches("[a-zA-Z]+")){
+            throw new RuntimeException("영어를 제외한 나머지 멈춰!");
+        }
+        String result = deviceService.register(deviceInfoDTO)? "suckSex!":"fuck!";
+        return result;
     }
 
-    @DeleteMapping("/deleteNum/{num}")
-    public String deleteNum(@PathVariable Long num){
-        // TODO: 등록된 디바이스를 삭제하는 로직을 작성합니다.
-        new NotImplementedException("구현이 되지 않은 서비스입니다.");
-        return "{ 'key' : 'value' }";
+    @DeleteMapping("/deleteNum/{deviceNumber}")
+    public String deleteNum(@PathVariable Long deviceNumber){
+        String result = deviceService.delete(deviceNumber)? "fuck!":"suckSex!";
+        return result;
     }
 
     @PostMapping("/access/{deviceNum}")
