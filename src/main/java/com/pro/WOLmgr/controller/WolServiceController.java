@@ -1,11 +1,13 @@
 package com.pro.WOLmgr.controller;
 
-import com.pro.WOLmgr.dto.DeviceInfoDTO;
-import com.pro.WOLmgr.repository.DeviceRepository;
+import com.pro.WOLmgr.dto.DeviceRequestDTO;
+import com.pro.WOLmgr.dto.DeviceResponseDTO;
 import com.pro.WOLmgr.service.DeviceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.NotImplementedException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class WolServiceController{
     private final DeviceService deviceService;
 
-    @PutMapping("/sendPacket/{packet}")
+    @PutMapping("/Packet/{packet}")
     public String sendPacket(@PathVariable String packet) {
         // TODO: 패킷을 전송하는 로직 구현
         new NotImplementedException("구현이 되지 않은 서비스입니다.");
@@ -28,19 +30,23 @@ public class WolServiceController{
         return "{ 'key' : 'value' }";
     }
 
-    @PostMapping("/computerInfoRegister")
-    public String computerInfo(@RequestBody DeviceInfoDTO deviceInfoDTO){
-        if(!deviceInfoDTO.getDeviceName().matches("[a-zA-Z]+")){
-            throw new RuntimeException("영어를 제외한 나머지 멈춰!");
+    @PostMapping("/device")
+    public ResponseEntity<?> computerInfo(@RequestBody DeviceRequestDTO deviceRequestDTO){
+        if(!deviceRequestDTO.getDeviceName().matches("[a-zA-Z0-9]+")){
+            return new ResponseEntity<>("Only English and numbers are available.",HttpStatus.BAD_REQUEST);
+        }else if(deviceService.deviceNameCheck(deviceRequestDTO.getDeviceName())){
+            return new ResponseEntity<>("Duplicate names are not allowed.",HttpStatus.BAD_REQUEST);
+        }else if(deviceService.macAddressCheck(deviceRequestDTO.getIpAddress())){
+            return new ResponseEntity<>("Duplicate IP addresses are not allowed.",HttpStatus.BAD_REQUEST);
         }
-        String result = deviceService.register(deviceInfoDTO)? "suckSex!":"fuck!";
-        return result;
+        return new ResponseEntity<>(deviceService.register(deviceRequestDTO), HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteNum/{deviceNumber}")
-    public String deleteNum(@PathVariable Long deviceNumber){
-        String result = deviceService.delete(deviceNumber)? "fuck!":"suckSex!";
-        return result;
+    @DeleteMapping("/device/{deviceNumber}")
+    public ResponseEntity<?> deleteNum(@PathVariable Long deviceNumber){
+        return deviceService.delete(deviceNumber)?
+                new ResponseEntity<>("Deletion failed.",HttpStatus.INTERNAL_SERVER_ERROR):
+                new ResponseEntity<>(deviceNumber,HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/access/{deviceNum}")

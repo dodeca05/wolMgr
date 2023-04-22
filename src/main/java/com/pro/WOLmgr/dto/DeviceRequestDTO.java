@@ -1,7 +1,6 @@
 package com.pro.WOLmgr.dto;
 
-import com.pro.WOLmgr.entity.Device;
-import com.pro.WOLmgr.entity.User;
+import com.pro.WOLmgr.entity.DeviceEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,18 +10,27 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeviceInfoDTO {
+public class DeviceRequestDTO {
     // TODO: 이하 추가 할 DTO를 추가합니다.
     private String deviceName;
     private String macAddress;
     private String ipAddress;
 
-    public static Device toEntity(DeviceInfoDTO dto) {
-        return Device
+    public static DeviceEntity toEntity(DeviceRequestDTO dto) {
+        return DeviceEntity
                 .builder()
                 .deviceName(dto.getDeviceName())
                 .macAddress(dto.getMacAddress())
                 .ipAddress(dto.getIpAddress())
+                .build();
+    }
+
+    public static DeviceRequestDTO toDTO(DeviceEntity entity) {
+        return DeviceRequestDTO
+                .builder()
+                .deviceName(entity.getDeviceName())
+                .macAddress(entity.getMacAddress())
+                .ipAddress(entity.getIpAddress())
                 .build();
     }
 
