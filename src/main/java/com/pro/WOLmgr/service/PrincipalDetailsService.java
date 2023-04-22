@@ -1,6 +1,6 @@
 package com.pro.WOLmgr.service;
 
-import com.pro.WOLmgr.entity.User;
+import com.pro.WOLmgr.entity.UserEntity;
 import com.pro.WOLmgr.repository.UserRepository;
 import com.pro.WOLmgr.util.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-        User user = userRepository.findByUserId(id);
-        return new PrincipalDetails(user);
+        UserEntity userEntity = userRepository.findByUserId(id);
+        return new PrincipalDetails(userEntity);
     }
 }
