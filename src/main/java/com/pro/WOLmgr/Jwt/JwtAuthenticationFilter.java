@@ -3,7 +3,7 @@ package com.pro.WOLmgr.Jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pro.WOLmgr.entity.User;
+import com.pro.WOLmgr.entity.UserEntity;
 import com.pro.WOLmgr.util.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -37,9 +37,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // 1. username, password 받아서
 
         ObjectMapper om = new ObjectMapper();
-        User user = null;
+        UserEntity user = null;
         try {
-            user = om.readValue(request.getInputStream(), User.class);
+            user = om.readValue(request.getInputStream(), UserEntity.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

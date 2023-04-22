@@ -1,7 +1,7 @@
 package com.pro.WOLmgr.service;
 
 import com.pro.WOLmgr.dto.UserPrivacyDTO;
-import com.pro.WOLmgr.entity.User;
+import com.pro.WOLmgr.entity.UserEntity;
 import com.pro.WOLmgr.repository.UserRepository;
 import com.pro.WOLmgr.util.Role;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class UserService {
         userDTO.setRoles(roles);
 
         userRepository.save(toEntity(userDTO));
-        User userInfo = userRepository.findByEmail(userDTO.getEmail());
+        UserEntity userInfo = userRepository.findByEmail(userDTO.getEmail());
 
         return userInfo.getUserNumber();
     }

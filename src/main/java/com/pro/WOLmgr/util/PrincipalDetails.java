@@ -1,7 +1,8 @@
 package com.pro.WOLmgr.util;
 
 
-import com.pro.WOLmgr.entity.User;
+
+import com.pro.WOLmgr.entity.UserEntity;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,7 +16,7 @@ import java.util.Collection;
 public class PrincipalDetails implements UserDetails {
 
     // PrincipalDetails 클래스의 필드로 User 객체를 가집니다. final로 선언되어 변경이 불가능하며, 생성자를 통해 초기화되어야 합니다.
-    private final User user;
+    private final UserEntity user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

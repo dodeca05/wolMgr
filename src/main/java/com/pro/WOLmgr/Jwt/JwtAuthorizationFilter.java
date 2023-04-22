@@ -2,7 +2,7 @@ package com.pro.WOLmgr.Jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.pro.WOLmgr.entity.User;
+import com.pro.WOLmgr.entity.UserEntity;
 import com.pro.WOLmgr.repository.UserRepository;
 import com.pro.WOLmgr.util.PrincipalDetails;
 import lombok.extern.log4j.Log4j2;
@@ -65,7 +65,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         // 서명이 유효한 경우
         if (userId != null) {
             // "userId" 값을 사용하여 사용자 정보를 조회합니다.
-            User user = userRepository.findByUsername(userId);
+            UserEntity user = userRepository.findByUsername(userId);
 
             // 사용자 정보를 기반으로 PrincipalDetails 객체를 생성합니다.
             PrincipalDetails principalDetails = new PrincipalDetails(user);
