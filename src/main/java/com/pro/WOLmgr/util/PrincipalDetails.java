@@ -1,7 +1,7 @@
 package com.pro.WOLmgr.util;
 
 
-import com.pro.WOLmgr.entity.User;
+import com.pro.WOLmgr.entity.UserEntity;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,7 +15,7 @@ import java.util.Collection;
 public class PrincipalDetails implements UserDetails {
 
     // PrincipalDetails 클래스의 필드로 User 객체를 가집니다. final로 선언되어 변경이 불가능하며, 생성자를 통해 초기화되어야 합니다.
-    private final User user;
+    private final UserEntity userEntity;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -23,18 +23,18 @@ public class PrincipalDetails implements UserDetails {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
 
         // User 객체의 RoleList를 반복하면서 권한 정보를 GrantedAuthority 타입으로 변환하여 authorities에 추가합니다.
-        user.getRoleList().forEach(r -> authorities.add(() -> r));
+        userEntity.getRoleList().forEach(r -> authorities.add(() -> r));
 
         // 생성된 authorities를 반환합니다.
         return authorities;
     }
 
     @Override
-    public String getPassword() { return user.getPassword(); } // User 객체의 비밀번호를 반환합니다.
+    public String getPassword() { return userEntity.getPassword(); } // User 객체의 비밀번호를 반환합니다.
 
     @Override
     public String getUsername() {
-        return user.getUsername(); // User 객체의 사용자 이름을 반환합니다.
+        return userEntity.getUsername(); // User 객체의 사용자 이름을 반환합니다.
     }
 
     @Override

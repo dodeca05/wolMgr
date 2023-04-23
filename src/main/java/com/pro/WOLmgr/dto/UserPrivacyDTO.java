@@ -1,6 +1,6 @@
 package com.pro.WOLmgr.dto;
 
-import com.pro.WOLmgr.entity.User;
+import com.pro.WOLmgr.entity.UserEntity;
 import com.pro.WOLmgr.util.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,8 +23,8 @@ public class UserPrivacyDTO {
     private Set<Role> roles;
 
     // DTO를 entity로 변환함
-    public static User toEntity(UserPrivacyDTO dto) {
-        return User
+    public static UserEntity toEntity(UserPrivacyDTO dto) {
+        return UserEntity
                 .builder()
                 .userNumber(dto.getUserNumber())
                 .userId(dto.getUserId())

@@ -3,7 +3,7 @@ package com.pro.WOLmgr.Jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pro.WOLmgr.entity.User;
+import com.pro.WOLmgr.entity.UserEntity;
 import com.pro.WOLmgr.util.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -37,16 +37,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // 1. username, password 받아서
 
         ObjectMapper om = new ObjectMapper();
-        User user = null;
+        UserEntity userEntity = null;
         try {
-            user = om.readValue(request.getInputStream(), User.class);
+            userEntity = om.readValue(request.getInputStream(), UserEntity.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        log.info(user);
+        log.info(userEntity);
 
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(user.getUserId(), user.getPassword());
+                new UsernamePasswordAuthenticationToken(userEntity.getUserId(), userEntity.getPassword());
 
         // PrincipalDetailsService의 loadUserByUsername() 를 사용함
         // DB에 있는 username과 password가 일치한다는 뜻
@@ -54,7 +54,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 authenticationManager.authenticate(authenticationToken);
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        log.info("로그인 완료 :" + principalDetails.getUser().getUserId()); // 로그인 되면 뜸
+        log.info("로그인 완료 :" + principalDetails.getUserEntity().getUserId()); // 로그인 되면 뜸
 
         // 세션에 authentication 이거 저장됨 => 로그인 되었다는 뜻
         // 권한 관리를 시큐리티가 대신 해주기 때문에 편하려고 해주는 것
@@ -80,9 +80,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String jwtToken = JWT.create()
                 .withSubject(principalDetails.getUsername()) // 의미 없음 토큰 이름
                 .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 만료시간 밀리초단위
-                .withClaim("userId", principalDetails.getUser().getUserId()) // 유저 아이디 비공개 클레임 내가 넣고싶은거 암거나 넣으면 댐
-                .withClaim("userRole", principalDetails.getUser().getRoleList()) // 유저 권한
-                .withClaim("userNumber", principalDetails.getUser().getUserNumber()) // 유저 넘버
+                .withClaim("userId", principalDetails.getUserEntity().getUserId()) // 유저 아이디 비공개 클레임 내가 넣고싶은거 암거나 넣으면 댐
+                .withClaim("userRole", principalDetails.getUserEntity().getRoleList()) // 유저 권한
+                .withClaim("userNumber", principalDetails.getUserEntity().getUserNumber()) // 유저 넘버
                 .sign(Algorithm.HMAC512(env.getProperty("jwt_secret"))); // 내 서버의 암호 암호는 서버가 마음대로 만들면됨
 
         response.addHeader("Authorization", "Bearer " + jwtToken);
