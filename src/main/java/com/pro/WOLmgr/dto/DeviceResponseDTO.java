@@ -16,7 +16,7 @@ public class DeviceResponseDTO {
     private String macAddress;
     private String ipAddress;
 
-    public static DeviceEntity toEntity(DeviceResponseDTO dto) {
+    public DeviceEntity toEntity(DeviceResponseDTO dto) {
         return DeviceEntity
                 .builder()
                 .deviceName(dto.getDeviceName())
@@ -25,7 +25,7 @@ public class DeviceResponseDTO {
                 .build();
     }
 
-    public static DeviceResponseDTO toDTO(DeviceEntity entity) {
+    public DeviceResponseDTO toDTO(DeviceEntity entity) {
         return DeviceResponseDTO
                 .builder()
                 .deviceName(entity.getDeviceName())

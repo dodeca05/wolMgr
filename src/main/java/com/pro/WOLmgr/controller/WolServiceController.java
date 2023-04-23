@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class WolServiceController{
     private final DeviceService deviceService;
 
-    @PutMapping("/Packet/{packet}")
+    @PutMapping("/packet/{packet}")
     public String sendPacket(@PathVariable String packet) {
         // TODO: 패킷을 전송하는 로직 구현
         new NotImplementedException("구현이 되지 않은 서비스입니다.");
@@ -31,7 +31,7 @@ public class WolServiceController{
     }
 
     @PostMapping("/device")
-    public ResponseEntity<?> computerInfo(@RequestBody DeviceRequestDTO deviceRequestDTO){
+    public ResponseEntity<?> deviceRegister(@RequestBody DeviceRequestDTO deviceRequestDTO){
         if(!deviceRequestDTO.getDeviceName().matches("[a-zA-Z0-9]+")){
             return new ResponseEntity<>("Only English and numbers are available.",HttpStatus.BAD_REQUEST);
         }else if(deviceService.deviceNameCheck(deviceRequestDTO.getDeviceName())){
@@ -43,7 +43,7 @@ public class WolServiceController{
     }
 
     @DeleteMapping("/device/{deviceNumber}")
-    public ResponseEntity<?> deleteNum(@PathVariable Long deviceNumber){
+    public ResponseEntity<?> deviceDelete(@PathVariable Long deviceNumber){
         return deviceService.delete(deviceNumber)?
                 new ResponseEntity<>("Deletion failed.",HttpStatus.INTERNAL_SERVER_ERROR):
                 new ResponseEntity<>(deviceNumber,HttpStatus.NO_CONTENT);
