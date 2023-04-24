@@ -65,10 +65,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         // 서명이 유효한 경우
         if (userId != null) {
             // "userId" 값을 사용하여 사용자 정보를 조회합니다.
-            UserEntity user = userRepository.findByUsername(userId);
+
+            UserEntity userEntity = userRepository.findByUsername(userId);
+
 
             // 사용자 정보를 기반으로 PrincipalDetails 객체를 생성합니다.
-            PrincipalDetails principalDetails = new PrincipalDetails(user);
+            PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
 
             // PrincipalDetails 객체의 권한 정보를 로그에 출력합니다.
             log.info(principalDetails.getAuthorities());
