@@ -33,6 +33,9 @@ public class UserEntity {
     @Enumerated(EnumType.STRING) // 그걸 문자열로 저장함
     private Set<Role> roles; // 사용자의 역할 정보를 나타내는 필드
 
+    @OneToMany(mappedBy = "authUser", cascade = CascadeType.ALL)
+    private List<DeviceAuthEntity> deviceAuthEntity;
+
     public List<String> getRoleList() {
         List<String> roleList = new ArrayList<>();
         for (Role role : roles) {
