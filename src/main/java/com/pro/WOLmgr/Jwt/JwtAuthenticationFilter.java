@@ -37,9 +37,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // 1. username, password 받아서
 
         ObjectMapper om = new ObjectMapper();
+
         UserEntity userEntity = null;
         try {
             userEntity = om.readValue(request.getInputStream(), UserEntity.class);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

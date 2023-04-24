@@ -22,7 +22,9 @@ public class UserInfoDTO {
     private Set<Role> roles;
 
     // entity를 DTO로 변환함
+
     public static UserInfoDTO toDto(UserEntity userEntity) {
+
         return UserInfoDTO
                 .builder()
                 .userNumber(userEntity.getUserNumber())

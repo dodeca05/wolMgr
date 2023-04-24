@@ -31,9 +31,11 @@ public class UserService {
         userDTO.setRoles(roles);
 
         userRepository.save(toEntity(userDTO));
-        UserEntity userEntityInfo = userRepository.findByEmail(userDTO.getEmail());
 
-        return userEntityInfo.getUserNumber();
+        UserEntity userEntity = userRepository.findByEmail(userDTO.getEmail());
+
+
+        return userEntity.getUserNumber();
     }
 
     public boolean idCheck(String userid) { return userRepository.existsByUserId(userid); }
