@@ -59,7 +59,7 @@ public class DeviceService {
         Optional<DeviceEntity> device = deviceRepository.findById(deviceAuthRequestDTO.getDeviceId());
 
         if(user.isPresent()&&device.isPresent()){
-            DeviceAuthEntity deviceAuthEntity = new DeviceAuthRequestDTO().toEntity(user.get(),device.get());
+            DeviceAuthEntity deviceAuthEntity = new DeviceAuthEntity(user.get(),device.get());
             deviceAuthRepository.save(deviceAuthEntity);
 
             DeviceAuthResponseDTO deviceAuthResponseDTO = new DeviceAuthResponseDTO().toEntity(deviceAuthEntity);
@@ -72,6 +72,7 @@ public class DeviceService {
 
     public boolean accessDelete(Long deviceAuthNum){
         deviceAuthRepository.deleteById(deviceAuthNum);
-        return deviceAuthRepository.existsByDeviceAuthNumber(deviceAuthNum);
+        boolean returnBool = deviceAuthRepository.existsByDeviceAuthNumber(deviceAuthNum);
+        return !returnBool;
     }
 }

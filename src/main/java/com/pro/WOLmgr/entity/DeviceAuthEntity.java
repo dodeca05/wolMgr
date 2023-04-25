@@ -23,4 +23,9 @@ public class DeviceAuthEntity {
     @JoinColumn
     private UserEntity authUser;
 
+    public DeviceAuthEntity(UserEntity user, DeviceEntity device) {
+        this.authUser = user;
+        this.authDevice = device;
+    }
+
 }

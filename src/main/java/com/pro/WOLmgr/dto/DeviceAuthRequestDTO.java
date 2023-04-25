@@ -23,6 +23,5 @@ public class DeviceAuthRequestDTO {
                 .authUser(user)
                 .authDevice(device)
                 .build();
-
     }
 }

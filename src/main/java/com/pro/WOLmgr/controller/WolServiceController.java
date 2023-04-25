@@ -51,22 +51,23 @@ public class WolServiceController{
     }
 
     @GetMapping("/access")
-    public ResponseEntity<?> accessCheck(@ModelAttribute DeviceAuthRequestDTO deviceAuthRequestDTO){
+    public ResponseEntity<?> accessRead(@ModelAttribute DeviceAuthRequestDTO deviceAuthRequestDTO){
         return deviceService.accessCheck(deviceAuthRequestDTO)?
                 new ResponseEntity<>(deviceAuthRequestDTO,HttpStatus.OK):
                 new ResponseEntity<>("Access failed.",HttpStatus.UNAUTHORIZED);
     }
 
     @PostMapping("/access")
-    public ResponseEntity<DeviceAuthResponseDTO> accessRegister(@RequestBody DeviceAuthRequestDTO deviceAuthRequestDTO){
+    public ResponseEntity<DeviceAuthResponseDTO> accessCreate(@RequestBody DeviceAuthRequestDTO deviceAuthRequestDTO){
         return new ResponseEntity<>(deviceService.accessRegister(deviceAuthRequestDTO),HttpStatus.OK);
     }
 
     @DeleteMapping("/access")
     public ResponseEntity<?> accessDelete(@RequestParam("deviceAuthNumber") Long deviceAuthNumber){
         return deviceService.accessDelete(deviceAuthNumber)?
-                new ResponseEntity<>("Deletion failed.",HttpStatus.INTERNAL_SERVER_ERROR):
-                new ResponseEntity<>(deviceAuthNumber, HttpStatus.NO_CONTENT);
+                new ResponseEntity<>(deviceAuthNumber, HttpStatus.NO_CONTENT):
+                new ResponseEntity<>("Deletion failed.",HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
 }
