@@ -13,12 +13,13 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequiredArgsConstructor
 @Log4j2
 public class WebController {
+
+    @GetMapping("/")//초기 페이지
+    public String index() { return "/wol/login"; }//TODO : 쿠키에 토큰값이 남아 있으면 메인으로 보내도록 하자
+
     @GetMapping("/wol/login")
     public void login(){}
 
-    @GetMapping("/")
-    public String index() { return "/wol/login"; }
-
     @GetMapping("/web/main")
-    public String main(){return "/wol";}
+    public String main(){return "/web/main";}
 }
