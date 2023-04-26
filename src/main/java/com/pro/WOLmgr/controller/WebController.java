@@ -21,5 +21,5 @@ public class WebController {
     public void login(){}
 
     @GetMapping("/web/main")
-    public String main(){return "/web/main";}
+    public void main(){}
 }
