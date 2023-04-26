@@ -13,19 +13,15 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DeviceAuthEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long deviceAuthNumber;
-    @ManyToOne
-    @JoinColumn
-    private DeviceEntity authDevice;
-    @ManyToOne
-    @JoinColumn
-    private UserEntity authUser;
+    @EmbeddedId
+    private DeviceAuthId id;
 
-    public DeviceAuthEntity(UserEntity user, DeviceEntity device) {
-        this.authUser = user;
-        this.authDevice = device;
-    }
+    @ManyToOne
+    @JoinColumn(name = "authDevice", insertable = false, updatable = false)
+    private DeviceEntity authDevice;
+
+    @ManyToOne
+    @JoinColumn(name = "authUser", insertable = false, updatable = false)
+    private UserEntity authUser;
 
 }

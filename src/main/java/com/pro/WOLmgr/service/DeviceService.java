@@ -5,6 +5,7 @@ import com.pro.WOLmgr.dto.DeviceAuthResponseDTO;
 import com.pro.WOLmgr.dto.DeviceRequestDTO;
 import com.pro.WOLmgr.dto.DeviceResponseDTO;
 import com.pro.WOLmgr.entity.DeviceAuthEntity;
+import com.pro.WOLmgr.entity.DeviceAuthId;
 import com.pro.WOLmgr.entity.DeviceEntity;
 import com.pro.WOLmgr.entity.UserEntity;
 import com.pro.WOLmgr.repository.DeviceAuthRepository;
@@ -48,31 +49,40 @@ public class DeviceService {
         boolean isAuth = false;
 
         if(user.isPresent()&&device.isPresent()){
-            isAuth = deviceAuthRepository.existsByAuthDeviceAndAuthUser(device.get(),user.get());
+            isAuth = deviceAuthRepository.existsByAuthUserAndAuthDevice(user.get(),device.get());
         }
 
         return isAuth;
     }
 
     public DeviceAuthResponseDTO accessRegister(DeviceAuthRequestDTO deviceAuthRequestDTO){
-        Optional<UserEntity> user = userRepository.findById(deviceAuthRequestDTO.getUserId());
-        Optional<DeviceEntity> device = deviceRepository.findById(deviceAuthRequestDTO.getDeviceId());
 
-        if(user.isPresent()&&device.isPresent()){
-            DeviceAuthEntity deviceAuthEntity = new DeviceAuthEntity(user.get(),device.get());
-            deviceAuthRepository.save(deviceAuthEntity);
+        DeviceAuthId deviceAuthId = DeviceAuthId
+                .builder()
+                .authDevice(deviceAuthRequestDTO.getDeviceId())
+                .authUser(deviceAuthRequestDTO.getUserId())
+                .build();
+        DeviceAuthEntity deviceAuthEntity = DeviceAuthEntity
+                .builder()
+                .id(deviceAuthId)
+                .build();
 
-            DeviceAuthResponseDTO deviceAuthResponseDTO = new DeviceAuthResponseDTO().toEntity(deviceAuthEntity);
+        deviceAuthRepository.save(deviceAuthEntity);
 
-            return deviceAuthResponseDTO;
-        }
-
-        return null;
+        DeviceAuthResponseDTO deviceAuthResponseDTO = new DeviceAuthResponseDTO().toDTO(deviceAuthId);
+        return deviceAuthResponseDTO;
     }
 
-    public boolean accessDelete(Long deviceAuthNum){
-        deviceAuthRepository.deleteById(deviceAuthNum);
-        boolean returnBool = deviceAuthRepository.existsByDeviceAuthNumber(deviceAuthNum);
+    public boolean accessDelete(DeviceAuthRequestDTO deviceAuthRequestDTO){
+        DeviceAuthId deviceAuthId = DeviceAuthId
+                .builder()
+                .authDevice(deviceAuthRequestDTO.getDeviceId())
+                .authUser(deviceAuthRequestDTO.getUserId())
+                .build();
+        deviceAuthRepository.deleteById(deviceAuthId);
+        Optional<UserEntity> user = userRepository.findById(deviceAuthRequestDTO.getUserId());
+        Optional<DeviceEntity> device = deviceRepository.findById(deviceAuthRequestDTO.getDeviceId());
+        boolean returnBool = deviceAuthRepository.existsByAuthUserAndAuthDevice(user.get(),device.get());
         return !returnBool;
     }
 }

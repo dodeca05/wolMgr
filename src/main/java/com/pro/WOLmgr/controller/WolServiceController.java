@@ -63,9 +63,9 @@ public class WolServiceController{
     }
 
     @DeleteMapping("/access")
-    public ResponseEntity<?> accessDelete(@RequestParam("deviceAuthNumber") Long deviceAuthNumber){
-        return deviceService.accessDelete(deviceAuthNumber)?
-                new ResponseEntity<>(deviceAuthNumber, HttpStatus.NO_CONTENT):
+    public ResponseEntity<?> accessDelete(@ModelAttribute DeviceAuthRequestDTO deviceAuthRequestDTO){
+        return deviceService.accessDelete(deviceAuthRequestDTO)?
+                new ResponseEntity<>(deviceAuthRequestDTO, HttpStatus.NO_CONTENT):
                 new ResponseEntity<>("Deletion failed.",HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
