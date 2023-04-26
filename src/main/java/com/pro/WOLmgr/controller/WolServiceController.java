@@ -20,15 +20,15 @@ public class WolServiceController{
     @PutMapping("/packet/{packet}")
     public String sendPacket(@PathVariable String packet) {
         // TODO: 패킷을 전송하는 로직 구현
-        new NotImplementedException("구현이 되지 않은 서비스입니다.");
-        return "{ 'key' : 'value' }";
+        throw new NotImplementedException("구현이 되지 않은 서비스입니다.");
+        //return "{ 'key' : 'value' }";
     }
 
     @GetMapping("/healthCheck/{com}")
     public String healthCheck(@PathVariable String com){
         // TODO: healthCheck 로직 구현
-        new NotImplementedException("구현이 되지 않은 서비스입니다.");
-        return "{ 'key' : 'value' }";
+        throw new NotImplementedException("구현이 되지 않은 서비스입니다.");
+        //return "{ 'key' : 'value' }";
     }
 
     @PostMapping("/device")
@@ -67,6 +67,7 @@ public class WolServiceController{
         return deviceService.accessDelete(deviceAuthRequestDTO)?
                 new ResponseEntity<>(deviceAuthRequestDTO, HttpStatus.NO_CONTENT):
                 new ResponseEntity<>("Deletion failed.",HttpStatus.INTERNAL_SERVER_ERROR);
+
 
     }
 
