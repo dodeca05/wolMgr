@@ -32,15 +32,14 @@ public class DeviceService {
         return responseDTO;
     }
 
-    public boolean delete(Long deleteNum){
+    public void delete(Long deleteNum){
         deviceRepository.deleteById(deleteNum);
-        return deviceRepository.existsByDeviceNumber(deleteNum);
     }
 
     public boolean macAddressCheck(String ipAddress){
         return deviceRepository.existsByMacAddress(ipAddress);
     }
-    public boolean deviceNameCheck(String deviceName) { return deviceRepository.existsByDeviceName(deviceName); }
+    public Boolean deviceNameCheck(String deviceName) { return deviceRepository.existsByDeviceName(deviceName); }
 
     public boolean accessCheck(DeviceAuthRequestDTO deviceAuthRequestDTO){
         Optional<UserEntity> user = userRepository.findById(deviceAuthRequestDTO.getUserId());
@@ -73,16 +72,12 @@ public class DeviceService {
         return deviceAuthResponseDTO;
     }
 
-    public boolean accessDelete(DeviceAuthRequestDTO deviceAuthRequestDTO){
+    public void accessDelete(DeviceAuthRequestDTO deviceAuthRequestDTO){
         DeviceAuthId deviceAuthId = DeviceAuthId
                 .builder()
                 .authDevice(deviceAuthRequestDTO.getDeviceId())
                 .authUser(deviceAuthRequestDTO.getUserId())
                 .build();
         deviceAuthRepository.deleteById(deviceAuthId);
-        Optional<UserEntity> user = userRepository.findById(deviceAuthRequestDTO.getUserId());
-        Optional<DeviceEntity> device = deviceRepository.findById(deviceAuthRequestDTO.getDeviceId());
-        boolean returnBool = deviceAuthRepository.existsByAuthUserAndAuthDevice(user.get(),device.get());
-        return !returnBool;
     }
 }
