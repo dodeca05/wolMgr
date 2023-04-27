@@ -1,7 +1,8 @@
 package com.pro.WOLmgr.controller;
 
+import com.pro.WOLmgr.dto.DeviceAuthRequestDTO;
+import com.pro.WOLmgr.dto.DeviceAuthResponseDTO;
 import com.pro.WOLmgr.dto.DeviceRequestDTO;
-import com.pro.WOLmgr.dto.DeviceResponseDTO;
 import com.pro.WOLmgr.service.DeviceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -49,11 +50,25 @@ public class WolServiceController{
                 new ResponseEntity<>(deviceNumber,HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/access/{deviceNum}")
-    public String access(@PathVariable Long deviceNum){
-        // TODO: 회원에게 권한을 제공하는 로직을 작성합니다.
-        throw new NotImplementedException("구현이 되지 않은 서비스입니다.");
-        //return "{ 'key' : 'value' }";
+    @GetMapping("/access")
+    public ResponseEntity<?> accessRead(@ModelAttribute DeviceAuthRequestDTO deviceAuthRequestDTO){
+        return deviceService.accessCheck(deviceAuthRequestDTO)?
+                new ResponseEntity<>(deviceAuthRequestDTO,HttpStatus.OK):
+                new ResponseEntity<>("Access failed.",HttpStatus.UNAUTHORIZED);
+    }
+
+    @PostMapping("/access")
+    public ResponseEntity<DeviceAuthResponseDTO> accessCreate(@RequestBody DeviceAuthRequestDTO deviceAuthRequestDTO){
+        return new ResponseEntity<>(deviceService.accessRegister(deviceAuthRequestDTO),HttpStatus.OK);
+    }
+
+    @DeleteMapping("/access")
+    public ResponseEntity<?> accessDelete(@ModelAttribute DeviceAuthRequestDTO deviceAuthRequestDTO){
+        return deviceService.accessDelete(deviceAuthRequestDTO)?
+                new ResponseEntity<>(deviceAuthRequestDTO, HttpStatus.NO_CONTENT):
+                new ResponseEntity<>("Deletion failed.",HttpStatus.INTERNAL_SERVER_ERROR);
+
+
     }
 
 }
