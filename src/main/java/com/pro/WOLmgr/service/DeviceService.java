@@ -85,4 +85,9 @@ public class DeviceService {
         boolean returnBool = deviceAuthRepository.existsByAuthUserAndAuthDevice(user.get(),device.get());
         return !returnBool;
     }
+
+    public DeviceEntity getDeviceEntity(String deviceName) {
+        Optional<DeviceEntity> deviceEntity=deviceRepository.findByDeviceName(deviceName);
+        return deviceEntity.get();
+    }
 }
