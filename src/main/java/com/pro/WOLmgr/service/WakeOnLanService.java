@@ -12,14 +12,14 @@ import java.net.InetAddress;
 public class WakeOnLanService {
 
     public void sendMagicPacket(DeviceEntity deviceEntity) throws IOException{//broadcast
-        sendMagicPacket("192.168.0.255",deviceEntity.getMacAddress());
+        sendMagicPacketDirect("192.168.0.255",deviceEntity.getMacAddress());
         //Todo: 처음에는 ip target을 정해서 보내고 추후 health check로 실패 하면 broadcast로 packet을 다시 보냅니다.
     }
 
-    public void sendMagicPacket(String macAddress) throws IOException{//broadcast
-        sendMagicPacket("192.168.0.255",macAddress);
+    public void sendMagicPacketBroadCast(String macAddress) throws IOException{//broadcast
+        sendMagicPacketDirect("192.168.0.255",macAddress);
     }
-    public void sendMagicPacket(String targetIP, String macAddress) throws IOException {
+    public void sendMagicPacketDirect(String targetIP, String macAddress) throws IOException {
         byte[] macBytes = getMacBytes(macAddress);
 
         // WOL 패킷 생성
