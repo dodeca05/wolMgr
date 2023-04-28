@@ -42,47 +42,8 @@ public class WolServiceController{
         //return "{ 'key' : 'value' }";
     }
 
-    @PostMapping("/device")
-    public ResponseEntity<DeviceResponseDTO> deviceRegister(@RequestBody DeviceRequestDTO deviceRequestDTO){
-//        TODO: 뷰단에서 자바스크립트 코드로 검증하도록 하자.
-//        if(!deviceRequestDTO.getDeviceName().matches("[a-zA-Z0-9]+")){
-//            return new ResponseEntity<>("Only English and numbers are available.",HttpStatus.BAD_REQUEST);
-//        }
-        return new ResponseEntity<>(deviceService.register(deviceRequestDTO), HttpStatus.OK);
-    }
 
-    @GetMapping("/device/duplication/{deviceName}")
-    public ResponseEntity<Boolean> deviceNameRead(@PathVariable String deviceName){
-        return new ResponseEntity<>(deviceService.deviceNameCheck(deviceName),HttpStatus.OK);
-    }
 
-    @GetMapping("/device/duplication/{macAddress}")
-    public ResponseEntity<Boolean> deviceMacAddressRead(@PathVariable String macAddress){
-        return new ResponseEntity<>(deviceService.macAddressCheck(macAddress),HttpStatus.OK);
-    }
 
-    @DeleteMapping("/device/{deviceNumber}")
-    public ResponseEntity<Long> deviceDelete(@PathVariable Long deviceNumber){
-        deviceService.delete(deviceNumber);
-        return new ResponseEntity<>(deviceNumber,HttpStatus.NO_CONTENT);
-    }
-
-    @GetMapping("/access")
-    public ResponseEntity<?> accessRead(@ModelAttribute DeviceAuthRequestDTO deviceAuthRequestDTO){
-        return deviceService.accessCheck(deviceAuthRequestDTO)?
-                new ResponseEntity<>(deviceAuthRequestDTO,HttpStatus.OK):
-                new ResponseEntity<>("Access failed.",HttpStatus.UNAUTHORIZED);
-    }
-
-    @PostMapping("/access")
-    public ResponseEntity<DeviceAuthResponseDTO> accessCreate(@RequestBody DeviceAuthRequestDTO deviceAuthRequestDTO){
-        return new ResponseEntity<>(deviceService.accessRegister(deviceAuthRequestDTO),HttpStatus.OK);
-    }
-
-    @DeleteMapping("/access")
-    public ResponseEntity<DeviceAuthRequestDTO> accessDelete(@ModelAttribute DeviceAuthRequestDTO deviceAuthRequestDTO){
-        deviceService.accessDelete(deviceAuthRequestDTO);
-        return new ResponseEntity<>(deviceAuthRequestDTO, HttpStatus.NO_CONTENT);
-    }
 
 }
