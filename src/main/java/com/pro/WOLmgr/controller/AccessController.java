@@ -18,7 +18,7 @@ public class AccessController {
     @GetMapping("/access")
     public ResponseEntity<?> accessRead(@ModelAttribute DeviceAuthRequestDTO deviceAuthRequestDTO){
         return deviceService.accessCheck(deviceAuthRequestDTO)?
-                new ResponseEntity<>(deviceAuthRequestDTO, HttpStatus.OK):
+                new ResponseEntity<>(deviceAuthRequestDTO,HttpStatus.OK):
                 new ResponseEntity<>("Access failed.",HttpStatus.UNAUTHORIZED);
     }
 
@@ -28,11 +28,8 @@ public class AccessController {
     }
 
     @DeleteMapping("/access")
-    public ResponseEntity<?> accessDelete(@ModelAttribute DeviceAuthRequestDTO deviceAuthRequestDTO){
-        return deviceService.accessDelete(deviceAuthRequestDTO)?
-                new ResponseEntity<>(deviceAuthRequestDTO, HttpStatus.NO_CONTENT):
-                new ResponseEntity<>("Deletion failed.",HttpStatus.INTERNAL_SERVER_ERROR);
-
-
+    public ResponseEntity<DeviceAuthRequestDTO> accessDelete(@ModelAttribute DeviceAuthRequestDTO deviceAuthRequestDTO){
+        deviceService.accessDelete(deviceAuthRequestDTO);
+        return new ResponseEntity<>(deviceAuthRequestDTO, HttpStatus.NO_CONTENT);
     }
 }

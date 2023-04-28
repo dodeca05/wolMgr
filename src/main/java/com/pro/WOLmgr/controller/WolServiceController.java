@@ -4,6 +4,7 @@ import com.pro.WOLmgr.dto.DeviceAuthRequestDTO;
 import com.pro.WOLmgr.dto.DeviceAuthResponseDTO;
 import com.pro.WOLmgr.dto.DeviceRequestDTO;
 import com.pro.WOLmgr.entity.DeviceEntity;
+import com.pro.WOLmgr.dto.DeviceResponseDTO;
 import com.pro.WOLmgr.service.DeviceService;
 import com.pro.WOLmgr.service.WakeOnLanService;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,7 @@ public class WolServiceController{
         throw new NotImplementedException("구현이 되지 않은 서비스입니다.");
         //return "{ 'key' : 'value' }";
     }
+
 
 
 

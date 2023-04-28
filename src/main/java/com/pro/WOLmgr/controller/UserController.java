@@ -62,7 +62,9 @@ public class UserController {
     public @ResponseBody HashMap<String,String> example(@RequestBody HashMap<String,String> params,
                                           HttpServletResponse response) {
         HashMap<String,String> result = new HashMap<>();
-
+        if(params.get("Authorization") == null){
+            return result;
+        }
         String token = params.get("Authorization").toString();
         response.setHeader("Authorization", token);
 
