@@ -1,5 +1,6 @@
 package com.pro.WOLmgr.service;
 
+import com.pro.WOLmgr.entity.DeviceEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -10,12 +11,15 @@ import java.net.InetAddress;
 @Service
 public class WakeOnLanService {
 
-    //Todo: db에 컴퓨터 정보가 담긴 entity 작성해서 해당 entity를 parsing 해서 packet을 보내자
-
-    public void sendMagicPacket(String macAddress) throws IOException{//broadcast
-        sendMagicPacket("192.168.0.255",macAddress);
+    public void sendMagicPacket(DeviceEntity deviceEntity) throws IOException{//broadcast
+        sendMagicPacketDirect("192.168.0.255",deviceEntity.getMacAddress());
+        //Todo: 처음에는 ip target을 정해서 보내고 추후 health check로 실패 하면 broadcast로 packet을 다시 보냅니다.
     }
-    public void sendMagicPacket(String targetIP, String macAddress) throws IOException {
+
+    public void sendMagicPacketBroadCast(String macAddress) throws IOException{//broadcast
+        sendMagicPacketDirect("192.168.0.255",macAddress);
+    }
+    public void sendMagicPacketDirect(String targetIP, String macAddress) throws IOException {
         byte[] macBytes = getMacBytes(macAddress);
 
         // WOL 패킷 생성

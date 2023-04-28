@@ -80,4 +80,9 @@ public class DeviceService {
                 .build();
         deviceAuthRepository.deleteById(deviceAuthId);
     }
+
+    public DeviceEntity getDeviceEntity(String deviceName) {
+        Optional<DeviceEntity> deviceEntity=deviceRepository.findByDeviceName(deviceName);
+        return deviceEntity.get();
+    }
 }
