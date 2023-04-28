@@ -22,7 +22,7 @@ public class WolServiceController{
     private final DeviceService deviceService;
     private final WakeOnLanService wakeOnLanService;
 
-    @PutMapping("/packet/{deviceName}")
+    @PutMapping("/wake/{deviceName}")
     public String sendPacket(@PathVariable String deviceName) {
         //TODO : 권한 체크
         DeviceEntity deviceEntity=deviceService.getDeviceEntity(deviceName);
@@ -31,7 +31,7 @@ public class WolServiceController{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return "success";
+        return "{'status':'success'}";
     }
 
     @GetMapping("/healthCheck/{deviceName}")

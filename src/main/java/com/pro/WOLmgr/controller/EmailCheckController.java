@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 @RestController
 @ApiIgnore
-public class CheckController {
+public class EmailCheckController {
 
     @GetMapping("/checkEmail")
     public @ResponseBody HashMap<String,Boolean> isEmail(){
