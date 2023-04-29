@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +28,7 @@ public class DeviceService {
 
     public DeviceResponseDTO register(DeviceRequestDTO deviceRequestDTO){
         DeviceEntity deviceEntity = new DeviceRequestDTO().toEntity(deviceRequestDTO);
-        DeviceResponseDTO responseDTO = new DeviceResponseDTO().toDTO(deviceRepository.save(deviceEntity));
+        DeviceResponseDTO responseDTO = DeviceResponseDTO.fromDTO(deviceRepository.save(deviceEntity));
         return responseDTO;
     }
 
@@ -39,7 +39,7 @@ public class DeviceService {
     public boolean macAddressCheck(String ipAddress){
         return deviceRepository.existsByMacAddress(ipAddress);
     }
-    public Boolean deviceNameCheck(String deviceName) { return deviceRepository.existsByDeviceName(deviceName); }
+    public boolean deviceNameCheck(String deviceName) { return deviceRepository.existsByDeviceName(deviceName); }
 
     public boolean accessCheck(DeviceAuthRequestDTO deviceAuthRequestDTO){
         Optional<UserEntity> user = userRepository.findById(deviceAuthRequestDTO.getUserId());
@@ -84,5 +84,14 @@ public class DeviceService {
     public DeviceEntity getDeviceEntity(String deviceName) {
         Optional<DeviceEntity> deviceEntity=deviceRepository.findByDeviceName(deviceName);
         return deviceEntity.get();
+    }
+
+    public List<DeviceResponseDTO>readDeviceList(){
+        List<DeviceEntity> deviceEntity=deviceRepository.findAll();
+        List<DeviceResponseDTO> result=new ArrayList<>();
+        for (DeviceEntity temp:deviceEntity) {
+            result.add(DeviceResponseDTO.fromDTO(temp));
+        }
+        return result;
     }
 }

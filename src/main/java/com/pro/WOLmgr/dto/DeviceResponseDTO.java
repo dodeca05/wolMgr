@@ -25,7 +25,7 @@ public class DeviceResponseDTO {
                 .build();
     }
 
-    public DeviceResponseDTO toDTO(DeviceEntity entity) {
+    public static DeviceResponseDTO fromDTO(DeviceEntity entity) {
         return DeviceResponseDTO
                 .builder()
                 .deviceName(entity.getDeviceName())
