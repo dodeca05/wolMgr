@@ -37,7 +37,7 @@
         <div class="col-lg-12">
             <div class="">
                 <div class="table-responsive">
-                    <table class="table project-list-table table-nowrap align-middle table-borderless">
+                    <table class="table project-list-table table-nowrap align-middle table-borderless" >
                         <thead>
                         <tr>
                             <th scope="col" class="ps-4" style="width: 50px;">
@@ -49,40 +49,7 @@
                             <th scope="col" style="width: 200px;">Action</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row" class="ps-4">
-                                <div class="form-check font-size-16"><input type="checkbox" class="form-check-input"
-                                                                            id="contacusercheck1"/><label
-                                        class="form-check-label" for="contacusercheck1"></label></div>
-                            </th>
-                            <td><span class="text-body">Simon Ryles</span></td>
-                            <td><span class="badge badge-soft-success mb-0">Full Stack Developer</span></td>
-                            <td><a href="/cdn-cgi/l/email-protection" class="__cf_email__"
-                                   data-cfemail="ffac96929091ad86939a8cbf929691969d939ad19c9092">[protected]</a>
-                            </td>
-                            <td>
-                                <ul class="list-inline mb-0">
-                                    <li class="list-inline-item">
-                                     <a href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-placement="top"
-                                        title="On" class="px-2 text-success"><i
-                                             class="bx bx-power-off font-size-20"></i></a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-placement="top"
-                                           title="Edit" class="px-2 text-primary"><i
-                                                class="bx bx-pencil font-size-20"></i></a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a href="javascript:void(0);" data-bs-toggle="tooltip" data-bs-placement="top"
-                                           title="Delete" class="px-2 text-danger"><i
-                                                class="bx bx-trash-alt font-size-20"></i></a>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-
-
+                        <tbody id="main-list">
                         </tbody>
                     </table>
                 </div>
@@ -99,6 +66,63 @@
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
+    function wakeOnLan(deviceName){
+        alert("켜기"+deviceName)
+    }
+    function editDevice(deviceName){
+        alert("수정"+deviceName)
+    }
+    function deleteDevice(deviceName){
+        alert("삭제"+deviceName)
+    }
+    $.ajax({
+        url:"/device",
+        type:"GET",
+        success: function(result) {
+            if (result) {
+                result.forEach(function (data){
+                    deviceName=data["deviceName"]
+                    ipAdress=data["ipAddress"]
+                    var form='<tr>\n' +
+                        '                            <th scope="row" class="ps-4">\n' +
+                        '                                <div class="form-check font-size-16"><input type="checkbox" class="form-check-input"\n' +
+                        '                                                                            id="contacusercheck1"/><label\n' +
+                        '                                        class="form-check-label" for="contacusercheck1"></label></div>\n' +
+                        '                            </th>\n' +
+                        '                            <td><span class="text-body">'+deviceName+'</span></td>\n' +
+                        '                            <td><span class="badge badge-soft-success mb-0">Full Stack Developer</span></td>\n' +
+                        '                            <td><a href="/cdn-cgi/l/email-protection" class="__cf_email__"\n' +
+                        '                                   data-cfemail="ffac96929091ad86939a8cbf929691969d939ad19c9092">[protected]</a>\n' +
+                        '                            </td>\n' +
+                        '                            <td>\n' +
+                        '                                <ul class="list-inline mb-0">\n' +
+                        '                                    <li class="list-inline-item">\n' +
+                        '                                     <a href="javascript:wakeOnLan(\''+deviceName+'\');" data-bs-toggle="tooltip" data-bs-placement="top"\n' +
+                        '                                        title="On" class="px-2 text-success"><i\n' +
+                        '                                             class="bx bx-power-off font-size-20"></i></a>\n' +
+                        '                                    </li>\n' +
+                        '                                    <li class="list-inline-item">\n' +
+                        '                                        <a href="javascript:editDevice(\''+deviceName+'\');" data-bs-toggle="tooltip" data-bs-placement="top"\n' +
+                        '                                           title="Edit" class="px-2 text-primary"><i\n' +
+                        '                                                class="bx bx-pencil font-size-20"></i></a>\n' +
+                        '                                    </li>\n' +
+                        '                                    <li class="list-inline-item">\n' +
+                        '                                        <a href="javascript:deleteDevice(\''+deviceName+'\');" data-bs-toggle="tooltip" data-bs-placement="top"\n' +
+                        '                                           title="Delete" class="px-2 text-danger"><i\n' +
+                        '                                                class="bx bx-trash-alt font-size-20"></i></a>\n' +
+                        '                                    </li>\n' +
+                        '                                </ul>\n' +
+                        '                            </td>\n' +
+                        '                        </tr>'
+                    $('#main-list').append(form)
+
+
+                })
+            } else {
+                alert("불러오기 실패");
+            }
+        }
+    });
 
 </script>
 </body>
