@@ -27,6 +27,7 @@
         <div class="col-md-6">
             <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3">
                 <div>
+                    <!--Todo: 권한 체크해서 해당 버튼 hidden 조종-->
                     <a href="#" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i
                             class="bx bx-plus me-1"></i> Add New</a>
                 </div>
@@ -67,13 +68,35 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
     function wakeOnLan(deviceName){
-        alert("켜기"+deviceName)
+        $.ajax({
+            url:"/wake/"+deviceName,
+            type: "PUT",
+            success: function (result){
+                alert("패킷 전송 성공")
+            },
+            error: function (request,status,error){
+                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+
+        })
     }
     function editDevice(deviceName){
-        alert("수정"+deviceName)
+        alert("미구현된 기능입니다")
+
     }
     function deleteDevice(deviceName){
-        alert("삭제"+deviceName)
+        $.ajax({
+            url:"/device/"+deviceName,
+            type: "DELETE",
+            success: function (result){
+                alert("삭제 완료")
+                location.reload()
+            },
+            error: function (request,status,error){
+                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+
+        })
     }
     $.ajax({
         url:"/device",
@@ -90,7 +113,7 @@
                         '                                        class="form-check-label" for="contacusercheck1"></label></div>\n' +
                         '                            </th>\n' +
                         '                            <td><span class="text-body">'+deviceName+'</span></td>\n' +
-                        '                            <td><span class="badge badge-soft-success mb-0">Full Stack Developer</span></td>\n' +
+                        '                            <td><span class="badge badge-soft-success mb-0">'+ipAdress+'</span></td>\n' +
                         '                            <td><a href="/cdn-cgi/l/email-protection" class="__cf_email__"\n' +
                         '                                   data-cfemail="ffac96929091ad86939a8cbf929691969d939ad19c9092">[protected]</a>\n' +
                         '                            </td>\n' +
