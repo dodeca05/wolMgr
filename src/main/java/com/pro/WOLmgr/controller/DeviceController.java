@@ -34,12 +34,12 @@ public class DeviceController {
     }
 
 
-    @GetMapping("/device/duplication/{deviceName}")
+    @PutMapping("/device/deviceDuplication/{deviceName}")
     public ResponseEntity<Boolean> deviceNameRead(@PathVariable String deviceName){
         return new ResponseEntity<>(deviceService.deviceNameCheck(deviceName),HttpStatus.OK);
     }
 
-    @GetMapping("/device/duplication/{macAddress}")//Todo : 겹침 값 중복을 확인하는 별도의 api로 통합 필요 Get -> Put 변경
+    @PutMapping("/device/macDuplication/{macAddress}")
     public ResponseEntity<Boolean> deviceMacAddressRead(@PathVariable String macAddress){
         return new ResponseEntity<>(deviceService.macAddressCheck(macAddress),HttpStatus.OK);
     }
