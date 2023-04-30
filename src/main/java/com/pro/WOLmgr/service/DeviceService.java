@@ -28,7 +28,7 @@ public class DeviceService {
 
     public DeviceResponseDTO register(DeviceRequestDTO deviceRequestDTO){
         DeviceEntity deviceEntity = new DeviceRequestDTO().toEntity(deviceRequestDTO);
-        DeviceResponseDTO responseDTO = DeviceResponseDTO.fromDTO(deviceRepository.save(deviceEntity));
+        DeviceResponseDTO responseDTO = DeviceResponseDTO.fromEntity(deviceRepository.save(deviceEntity));
         return responseDTO;
     }
 
@@ -90,7 +90,7 @@ public class DeviceService {
         List<DeviceEntity> deviceEntity=deviceRepository.findAll();
         List<DeviceResponseDTO> result=new ArrayList<>();
         for (DeviceEntity temp:deviceEntity) {
-            result.add(DeviceResponseDTO.fromDTO(temp));
+            result.add(DeviceResponseDTO.fromEntity(temp));
         }
         return result;
     }
