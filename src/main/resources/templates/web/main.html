@@ -28,8 +28,8 @@
             <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3">
                 <div>
                     <!--Todo: 권한 체크해서 해당 버튼 hidden 조종-->
-                    <a href="#" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i
-                            class="bx bx-plus me-1"></i> Add New</a>
+                    <button onclick="window.location.href = '/web/add';" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary"><i
+                            class="bx bx-plus me-1"></i> Add New</button>
                 </div>
             </div>
         </div>
@@ -81,7 +81,7 @@
         })
     }
     function editDevice(deviceName){
-        alert("미구현된 기능입니다")
+        window.location.href = '/web/add?name='+deviceName;
 
     }
     function deleteDevice(deviceName){

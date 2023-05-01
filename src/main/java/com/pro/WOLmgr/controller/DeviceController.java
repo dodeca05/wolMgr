@@ -33,6 +33,12 @@ public class DeviceController {
         return deviceService.readDeviceList();
     }
 
+    @GetMapping("/device/{deviceName}")
+    public DeviceResponseDTO readDevice(@PathVariable String deviceName)
+    {
+        return DeviceResponseDTO.fromEntity(deviceService.getDeviceEntity(deviceName));
+    }
+
 
     @GetMapping("/device/duplication/{deviceName}")
     public ResponseEntity<Boolean> deviceNameRead(@PathVariable String deviceName){
