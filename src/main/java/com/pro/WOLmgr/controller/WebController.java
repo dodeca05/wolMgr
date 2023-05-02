@@ -22,4 +22,7 @@ public class WebController {
 
     @GetMapping("/web/main")
     public void main(){}
+
+    @GetMapping("/web/add")
+    public void addPc(){}
 }
