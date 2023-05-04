@@ -20,13 +20,25 @@ public class DeviceController {
     private final DeviceService deviceService;
 
     @PostMapping("/device")
-    public ResponseEntity<DeviceResponseDTO> deviceRegister(@RequestBody DeviceRequestDTO deviceRequestDTO){
+    public ResponseEntity<DeviceResponseDTO> createDevice(@RequestBody DeviceRequestDTO deviceRequestDTO){
 //        TODO: 뷰단에서 자바스크립트 코드로 검증하도록 하자.
 //        if(!deviceRequestDTO.getDeviceName().matches("[a-zA-Z0-9]+")){
 //            return new ResponseEntity<>("Only English and numbers are available.",HttpStatus.BAD_REQUEST);
 //        }
         return new ResponseEntity<>(deviceService.register(deviceRequestDTO), HttpStatus.OK);
     }
+    @PutMapping("/device")
+    public ResponseEntity<DeviceResponseDTO> updateDevice(@RequestBody DeviceRequestDTO deviceRequestDTO){
+//        TODO: 뷰단에서 자바스크립트 코드로 검증하도록 하자.
+//        if(!deviceRequestDTO.getDeviceName().matches("[a-zA-Z0-9]+")){
+//            return new ResponseEntity<>("Only English and numbers are available.",HttpStatus.BAD_REQUEST);
+//        }
+        //TODO: 뭔가 좀 더 좋은 JPA 로직이 있을 듯 하다
+        deviceService.delete(deviceRequestDTO.getDeviceName());
+        return new ResponseEntity<>(deviceService.register(deviceRequestDTO), HttpStatus.OK);
+    }
+
+
     @GetMapping("/device")
     public List<DeviceResponseDTO>readDeviceList()
     {
@@ -51,7 +63,7 @@ public class DeviceController {
     }
 
     @DeleteMapping("/device/{deviceName}")
-    public ResponseEntity<String> deviceDelete(@PathVariable String deviceName){
+    public ResponseEntity<String> deleteDevice(@PathVariable String deviceName){
         deviceService.delete(deviceName);
         return new ResponseEntity<>(deviceName,HttpStatus.NO_CONTENT);
     }
