@@ -12,5 +12,7 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity,Long> {
     boolean existsByDeviceName(String name);
     boolean existsByDeviceNumber(Long deviceNumber);
 
+    void deleteByDeviceName(String deviceName);
+
     Optional<DeviceEntity> findByDeviceName(String deviceName);
 }
