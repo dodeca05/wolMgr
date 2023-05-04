@@ -50,9 +50,9 @@ public class DeviceController {
         return new ResponseEntity<>(deviceService.macAddressCheck(macAddress),HttpStatus.OK);
     }
 
-    @DeleteMapping("/device/{deviceNumber}")//Todo:권한 체크 및 deviceNumber를 deviceName 변경 고려
-    public ResponseEntity<Long> deviceDelete(@PathVariable Long deviceNumber){
-        deviceService.delete(deviceNumber);
-        return new ResponseEntity<>(deviceNumber,HttpStatus.NO_CONTENT);
+    @DeleteMapping("/device/{deviceName}")
+    public ResponseEntity<String> deviceDelete(@PathVariable String deviceName){
+        deviceService.delete(deviceName);
+        return new ResponseEntity<>(deviceName,HttpStatus.NO_CONTENT);
     }
 }

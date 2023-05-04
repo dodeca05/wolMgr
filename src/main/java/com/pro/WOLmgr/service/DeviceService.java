@@ -14,6 +14,7 @@ import com.pro.WOLmgr.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -32,8 +33,9 @@ public class DeviceService {
         return responseDTO;
     }
 
-    public void delete(Long deleteNum){
-        deviceRepository.deleteById(deleteNum);
+    @Transactional
+    public void delete(String deviceName){
+        deviceRepository.deleteByDeviceName(deviceName);
     }
 
     public boolean macAddressCheck(String ipAddress){
