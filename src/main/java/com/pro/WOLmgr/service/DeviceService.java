@@ -32,11 +32,10 @@ public class DeviceService {
         DeviceResponseDTO responseDTO = DeviceResponseDTO.fromEntity(deviceRepository.save(deviceEntity));
         return responseDTO;
     }
+    /*
     public DeviceResponseDTO updateDevice(DeviceRequestDTO deviceRequestDTO){
-        DeviceEntity deviceEntity = new DeviceRequestDTO().toEntity(deviceRequestDTO);
-        DeviceResponseDTO responseDTO = DeviceResponseDTO.fromEntity(deviceRepository.save(deviceEntity));
-        return responseDTO;
-    }
+
+    }*/
 
 
 
