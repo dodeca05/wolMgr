@@ -152,6 +152,10 @@
         }
     });
 
+    let Authorization = localStorage.getItem("Authorization");
+
+    if(Authorization==null || Authorization=="")
+        window.location.href = '/'
 </script>
 </body>
 </html>
