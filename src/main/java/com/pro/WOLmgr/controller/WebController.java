@@ -15,11 +15,14 @@ import springfox.documentation.annotations.ApiIgnore;
 public class WebController {
 
     @GetMapping("/")//초기 페이지
-    public String index() { return "/wol/login"; }//TODO : 쿠키에 토큰값이 남아 있으면 메인으로 보내도록 하자
+    public String index() { return "Wol/login"; }//TODO : 쿠키에 토큰값이 남아 있으면 메인으로 보내도록 하자
 
-    @GetMapping("/wol/login")
+    @GetMapping("/Wol/login")
     public void login(){}
 
     @GetMapping("/web/main")
     public void main(){}
+
+    @GetMapping("/web/add")
+    public void addPc(){}
 }
