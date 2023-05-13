@@ -3,9 +3,12 @@ package com.pro.WOLmgr.controller;
 import com.pro.WOLmgr.dto.UserPrivacyDTO;
 import com.pro.WOLmgr.service.MailService;
 import com.pro.WOLmgr.service.UserService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,6 +59,23 @@ public class UserController {
         else{result.put("result","noContain");}
 
         return result;
+    }
+    @GetMapping("/auth/check")
+    public @ResponseBody ResponseEntity getAuthState(@RequestHeader("Authorization") String authorizationHeader) {
+        try {
+            log.info("실행");
+            String token = authorizationHeader.substring(7);
+            Jwts.parser().setSigningKey("dodeca10150513").parseClaimsJws(token);
+            log.info("정상");
+            return ResponseEntity.ok(true);
+        } catch (ExpiredJwtException ex) {
+            log.info("만료");
+            return ResponseEntity.ok(false);
+        } catch (Exception ex) {
+            log.error("문제 생김");
+            log.error(ex);
+            return ResponseEntity.ok(false);
+        }
     }
 
     @PostMapping("/auth/duplication")
