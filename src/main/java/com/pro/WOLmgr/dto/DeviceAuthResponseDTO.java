@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DeviceAuthResponseDTO {
 
-    private Long userId;
-    private Long deviceId;
+    private String userId;
+    private String deviceId;
 
     public DeviceAuthResponseDTO toDTO(DeviceAuthId entity){
         return DeviceAuthResponseDTO

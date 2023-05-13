@@ -14,8 +14,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class UserPrivacyDTO {
-
-    private Long userNumber;
     private String userId;
     private String username;
     private String password;
@@ -26,7 +24,6 @@ public class UserPrivacyDTO {
     public static UserEntity toEntity(UserPrivacyDTO dto) {
         return UserEntity
                 .builder()
-                .userNumber(dto.getUserNumber())
                 .userId(dto.getUserId())
                 .password(dto.getPassword())
                 .username(dto.getUsername())

@@ -14,7 +14,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DeviceAuthId implements Serializable {
-    private Long authDevice;
-    private Long authUser;
+    private String authDevice;
+    private String authUser;
 
 }
