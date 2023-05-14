@@ -16,15 +16,12 @@ import java.util.Set;
 @ToString
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userNumber; // pk로 사용함, 자동으로 생성되는 ID 값
+    private String username; // 사용자 이름을 나타내는 필드, 디폴트 255
 
     @Column(nullable = false, unique = true)
     private String userId; // 사용자 ID를 나타내는 필드, null 값 불가 및 고유한 값이어야 함, 디폴트 255
 
     private String password; // 사용자 비밀번호를 나타내는 필드, 디폴트 255
-
-    private String username; // 사용자 이름을 나타내는 필드, 디폴트 255
 
     @Column(nullable = false, unique = true)
     private String email; // 사용자 이메일을 나타내는 필드, null 값 불가 및 고유한 값이어야 함, 디폴트 255

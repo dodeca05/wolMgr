@@ -14,8 +14,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class UserInfoDTO {
-
-    private Long userNumber;
     private String userId;
     private String username;
     private String email;
@@ -27,7 +25,6 @@ public class UserInfoDTO {
 
         return UserInfoDTO
                 .builder()
-                .userNumber(userEntity.getUserNumber())
                 .userId(userEntity.getUserId())
                 .username(userEntity.getUsername())
                 .email(userEntity.getEmail())

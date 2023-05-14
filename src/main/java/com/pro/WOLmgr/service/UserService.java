@@ -1,5 +1,6 @@
 package com.pro.WOLmgr.service;
 
+import com.pro.WOLmgr.dto.UserInfoDTO;
 import com.pro.WOLmgr.dto.UserPrivacyDTO;
 import com.pro.WOLmgr.entity.UserEntity;
 import com.pro.WOLmgr.repository.UserRepository;
@@ -22,7 +23,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public Long register(UserPrivacyDTO userDTO) {
+    public UserInfoDTO userCreate(UserPrivacyDTO userDTO) {
         // 최초 회원가입때는 회원의 권한을 유저로 한정합니다.
         Set<Role> roles = EnumSet.of(Role.USER);
 
@@ -31,11 +32,14 @@ public class UserService {
         userDTO.setRoles(roles);
 
         userRepository.save(toEntity(userDTO));
+        return UserInfoDTO.toDto(userRepository.findByEmail(userDTO.getEmail()));
+    }
 
-        UserEntity userEntity = userRepository.findByEmail(userDTO.getEmail());
-
-
-        return userEntity.getUserNumber();
+    public UserInfoDTO userUpdate(UserPrivacyDTO dto){
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+        dto.setRoles(dto.getRoles());
+        userRepository.save(toEntity(dto));
+        return UserInfoDTO.toDto(userRepository.findByEmail(dto.getEmail()));
     }
 
     public boolean idCheck(String userid) { return userRepository.existsByUserId(userid); }

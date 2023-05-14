@@ -34,7 +34,7 @@ public class UserController {
     @PostMapping("/join") // 회원가입
     public @ResponseBody HashMap<String,String> join(@RequestBody UserPrivacyDTO userDTO){
         HashMap<String,String> result = new HashMap<>();
-        userService.register(userDTO);
+        userService.userCreate(userDTO);
         result.put("result","회원가입 완료^^");
         return result;
     }
