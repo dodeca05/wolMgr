@@ -14,7 +14,7 @@ public class AdminController {
     private final UserService userService;
 
     @PutMapping("/user")
-    public UserInfoDTO userUpdate(UserPrivacyDTO dto){
+    public UserInfoDTO updateUser(UserPrivacyDTO dto){
         return userService.userUpdate(dto);
     }
 
