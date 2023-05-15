@@ -3,9 +3,13 @@ package com.pro.WOLmgr.controller;
 import com.pro.WOLmgr.dto.UserPrivacyDTO;
 import com.pro.WOLmgr.service.MailService;
 import com.pro.WOLmgr.service.UserService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,6 +60,11 @@ public class UserController {
         else{result.put("result","noContain");}
 
         return result;
+    }
+    @GetMapping("/auth/check")
+    public @ResponseBody ResponseEntity getAuthState(@RequestHeader("Authorization") String authorizationHeader) {
+        //Todo : 토큰에 문제 있으면 알아서 Exception 나온다 지금은 토큰에 문제가 있으면 500에러가 나온다. 이를 바꿔주는 코드 추가
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/auth/duplication")
