@@ -34,34 +34,33 @@ public class UserService {
             String jwtToken = JWT.create()
                     .withSubject(userDTO.getUsername()) // 의미 없음 토큰 이름
                     .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 30 * 12 * 10)) // 만료시간 밀리초단위
-                    .withClaim("userId", userDTO.getUserId()) // 유저 아이디 비공개 클레임 내가 넣고싶은거 암거나 넣으면 댐
+                    .withClaim("username", userDTO.getUsername()) // 유저 아이디 비공개 클레임 내가 넣고싶은거 암거나 넣으면 댐
                     .withClaim("userRole", "SERVICE") // 유저 권한
-                    .withClaim("accessibleDevice", userDTO.getAccessibleDevice())
                     .sign(Algorithm.HMAC512(env.getProperty("jwt_secret"))); // 내 서버의 암호 암호는 서버가 마음대로 만들면됨
             userDTO.setServiceToken(jwtToken);
         }
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        userRepository.save(UserPrivacyDTO.toEntity(userDTO));
-        return UserInfoDTO.toDto(userRepository.findByEmail(userDTO.getEmail()));
+        userRepository.save(UserPrivacyDTO.fromDTO(userDTO));
+        return userRepository.findByEmail(userDTO.getEmail()).toDto();
     }
 
     public UserInfoDTO userUpdate(UserInfoDTO dto){
         UserEntity user = userRepository.findByUsername(dto.getUsername());
         user.change(dto);
         userRepository.save(user);
-        return UserInfoDTO.toDto(userRepository.findByUsername(dto.getUsername()));
+        return userRepository.findByUsername(dto.getUsername()).toDto();
     }
 
     public List<UserInfoDTO> readUserList(){
         return userRepository
                 .findAll()
                 .stream()
-                .map(user -> UserInfoDTO.toDto(user))
+                .map(user -> user.toDto())
                 .collect(Collectors.toList());
     }
 
     public UserInfoDTO readUser(String username){
-        return UserInfoDTO.toDto(userRepository.findByUsername(username));
+        return userRepository.findByUsername(username).toDto();
     }
     public boolean idCheck(String userid) { return userRepository.existsByUserId(userid); }
     public boolean emailCheck(String email){

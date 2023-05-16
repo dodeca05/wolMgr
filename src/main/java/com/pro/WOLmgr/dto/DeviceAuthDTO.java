@@ -19,11 +19,4 @@ public class DeviceAuthDTO {
     private String userId;
     private List<String> deviceId;
 
-    public DeviceAuthEntity toEntity(UserEntity user, DeviceEntity device){
-        return DeviceAuthEntity
-                .builder()
-                .authUser(user)
-                .authDevice(device)
-                .build();
-    }
 }

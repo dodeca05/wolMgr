@@ -1,11 +1,6 @@
 function authCheck() {
-
     let Authorization = localStorage.getItem("Authorization");
-
-    let data = { Authorization }
-
-    ajaxForm('POST', '/auth/duplication', data);
-
+    ajaxForm('GET', '/auth/duplication/'+Authorization);
 }
 
 function logout() {

@@ -24,7 +24,7 @@ public class UserPrivacyDTO {
     private List<String> accessibleDevice;
 
     // DTO를 entity로 변환함
-    public static UserEntity toEntity(UserPrivacyDTO dto) {
+    public static UserEntity fromDTO(UserPrivacyDTO dto) {
         return UserEntity
                 .builder()
                 .userId(dto.getUserId())

@@ -17,11 +17,6 @@ import java.util.List;
 public class AccessController {
     private final DeviceService deviceService;
 
-    @GetMapping("/access/{username}")
-    public List<DeviceResponseDTO> readDeviceList(@PathVariable String username){
-        return deviceService.userAccessDevices(username);
-    }
-
     @PostMapping("/access")
     public ResponseEntity<DeviceAuthDTO> accessCreate(@RequestBody DeviceAuthDTO deviceAuthDTO){
         return new ResponseEntity<>(deviceService.accessRegister(deviceAuthDTO),HttpStatus.OK);

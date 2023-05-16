@@ -70,7 +70,7 @@ function handleSignUp() {
 function idCheck() {
 
     let userId = $('#joinUserid').val();
-    let url = '/id/duplication?userId='+userId
+    let url = '/id/duplication/'+userId
 
     ajaxForm('GET', url, null, function (result) {
         if (result.result === 'noContain') {
@@ -90,7 +90,7 @@ function idCheck() {
 function emailCheck() {
 
     let email = $('#joinEmail').val();
-    let url = '/email/duplication?email='+email
+    let url = '/email/duplication/'+email
 
     ajaxForm('GET', url, null, function (result) {
         if (result.result === 'noContain') {
@@ -111,7 +111,7 @@ function login() {
 
     let userId = $('#loginUserid').val();
     let password = $('#loginPassword').val();
-    let url = '/id/duplication?userId='+userId
+    let url = '/id/duplication/'+userId
 
     // 로컬 스토리지 초기화
     let init = localStorage.setItem("Authorization", "");

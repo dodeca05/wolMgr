@@ -49,4 +49,14 @@ public class UserEntity {
         this.email = dto.getEmail();
         this.roles = dto.getRoles();
     }
+
+    public UserInfoDTO toDto(){
+        return UserInfoDTO
+                .builder()
+                .userId(userId)
+                .username(username)
+                .email(email)
+                .roles(roles)
+                .build();
+    }
 }

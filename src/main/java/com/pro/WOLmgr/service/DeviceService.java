@@ -27,7 +27,7 @@ public class DeviceService {
     private final DeviceAuthRepository deviceAuthRepository;
 
     public DeviceResponseDTO register(DeviceRequestDTO deviceRequestDTO){
-        DeviceEntity deviceEntity = new DeviceRequestDTO().toEntity(deviceRequestDTO);
+        DeviceEntity deviceEntity = DeviceRequestDTO.fromDTO(deviceRequestDTO);
         DeviceResponseDTO responseDTO = DeviceResponseDTO.fromEntity(deviceRepository.save(deviceEntity));
         return responseDTO;
     }

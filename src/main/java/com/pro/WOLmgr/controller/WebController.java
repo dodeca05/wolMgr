@@ -26,7 +26,7 @@ public class WebController {
     @GetMapping("/web/add")
     public void addPc(){}
 
-    @GetMapping("/control/index")
+    @GetMapping("/web/index")
     public void adminIndex(){}
 
     @GetMapping("/web/userAdd")

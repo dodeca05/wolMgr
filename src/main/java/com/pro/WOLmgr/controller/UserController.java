@@ -27,12 +27,9 @@ public class UserController {
 
 
     //이메일 인증
-    @GetMapping("/mailSendNum") // 메일 유효성 검사
-    public @ResponseBody HashMap<String,String> mailSendNum(@RequestParam("email") String email)
-            throws MessagingException, IOException {
-        HashMap<String,String> result = new HashMap<>();
-        result.put("checkNumber",mailService.joinEmail(email));
-        return result;
+    @GetMapping("/mailSendNum/{email}") // 메일 유효성 검사
+    public ResponseEntity<String> mailSendNum(@PathVariable String email) throws MessagingException, IOException {
+        return new ResponseEntity<>(mailService.joinEmail(email), HttpStatus.OK);
     }
 
     @GetMapping("/member")
@@ -45,48 +42,28 @@ public class UserController {
         return new ResponseEntity<>(userService.readUser(username),HttpStatus.OK);
     }
 
-    @PostMapping("/member") // 회원가입
-    public @ResponseBody HashMap<String,String> join(@RequestBody UserPrivacyDTO userDTO){
-        HashMap<String,String> result = new HashMap<>();
-        userService.userCreate(userDTO);
-        result.put("result","회원가입 완료^^");
-        return result;
-    }
-
     @GetMapping("/username/duplication/{username}")
-    public ResponseEntity<Boolean> usernameCheck(String username){
+    public ResponseEntity<Boolean> usernameCheck(@PathVariable String username){
         return new ResponseEntity<>(userService.userNameCheck(username),HttpStatus.OK);
     }
 
-    @GetMapping("/id/duplication") // 아이디 중복 체크
-    public @ResponseBody HashMap<String,String> idCheck(@RequestParam("userId") String userId){
-
-        HashMap<String,String> result = new HashMap<>();
-        if (userService.idCheck(userId)){result.put("result","contain");}
-        else{result.put("result","noContain");}
-
-        return result;
+    @GetMapping("/id/duplication/{userId}") // 아이디 중복 체크
+    public ResponseEntity<Boolean> idCheck(@PathVariable String userId){
+        return new ResponseEntity<>(userService.idCheck(userId), HttpStatus.OK);
     }
 
-    @GetMapping("/email/duplication") // 이메일 중복 체크
-    public @ResponseBody HashMap<String,String> emailCheck(@RequestParam("email") String email){
-        HashMap<String,String> result = new HashMap<>();
-        if (userService.emailCheck(email)){result.put("result","contain");}
-        else{result.put("result","noContain");}
-
-        return result;
+    @GetMapping("/email/duplication/{email}") // 이메일 중복 체크
+    public ResponseEntity<Boolean> emailCheck(@PathVariable String email){
+        return new ResponseEntity<>(userService.emailCheck(email), HttpStatus.OK);
     }
 
-    @PostMapping("/auth/duplication")
-    public @ResponseBody HashMap<String,String> example(@RequestBody HashMap<String,String> params,
-                                          HttpServletResponse response) {
-        HashMap<String,String> result = new HashMap<>();
-        if(params.get("Authorization") == null){
-            return result;
-        }
-        String token = params.get("Authorization").toString();
+    @GetMapping("/auth/duplication/{token}")
+    public void example(@PathVariable String token, HttpServletResponse response) {
         response.setHeader("Authorization", token);
+    }
 
-        return result;
+    @PostMapping("/member") // 회원가입
+    public UserInfoDTO join(@RequestBody UserPrivacyDTO userDTO){
+        return userService.userCreate(userDTO);
     }
 }

@@ -191,7 +191,7 @@
             })
         }
     $.ajax({
-        url:"/access/"+userName,
+        url:"/device?username="+userName,
         type:"GET",
         success: function(result) {
             if (result) {

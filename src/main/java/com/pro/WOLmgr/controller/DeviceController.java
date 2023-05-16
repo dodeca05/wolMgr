@@ -40,9 +40,14 @@ public class DeviceController {
 
 
     @GetMapping("/device")
-    public List<DeviceResponseDTO>readDeviceList()
+    public List<DeviceResponseDTO> readDeviceList(@RequestParam(
+            name = "username",
+            required = false,
+            defaultValue = "") String username)
     {
-        return deviceService.readDeviceList();
+        return username.isEmpty()?
+                deviceService.readDeviceList():
+                deviceService.userAccessDevices(username);
     }
 
     @GetMapping("/device/{deviceName}")
