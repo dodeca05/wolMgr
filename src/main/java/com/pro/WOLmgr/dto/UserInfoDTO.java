@@ -31,4 +31,14 @@ public class UserInfoDTO {
                 .roles(userEntity.getRoles())
                 .build();
     }
+
+    public static UserEntity toEntity(UserInfoDTO dto) {
+        return UserEntity
+                .builder()
+                .userId(dto.getUserId())
+                .username(dto.getUsername())
+                .email(dto.getEmail())
+                .roles(dto.getRoles())
+                .build();
+    }
 }

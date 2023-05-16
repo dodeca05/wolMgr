@@ -1,17 +1,11 @@
 package com.pro.WOLmgr.controller;
 
-import com.pro.WOLmgr.dto.DeviceAuthRequestDTO;
-import com.pro.WOLmgr.dto.DeviceAuthResponseDTO;
-import com.pro.WOLmgr.dto.DeviceRequestDTO;
 import com.pro.WOLmgr.entity.DeviceEntity;
-import com.pro.WOLmgr.dto.DeviceResponseDTO;
 import com.pro.WOLmgr.service.DeviceService;
 import com.pro.WOLmgr.service.WakeOnLanService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.NotImplementedException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;

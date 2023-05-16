@@ -55,7 +55,7 @@ function handleSignUp() {
     }
 
     // 회원가입에 필요한 데이터 생성
-    let data = { userId, password, username, email }
+    let data = { userId, password, username, email, "roles":[USER] }
 
     // 서버로 데이터 전송
     ajaxForm('POST', '/join', data, function (result) {
