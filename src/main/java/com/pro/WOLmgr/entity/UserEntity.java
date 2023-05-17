@@ -27,14 +27,16 @@ public class UserEntity {
     @Column(nullable = false, unique = true)
     private String email; // 사용자 이메일을 나타내는 필드, null 값 불가 및 고유한 값이어야 함, 디폴트 255
 
-    private String serviceToken;
-
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER) // Enum 타입의 컬렉션으로 저장되며, 즉시 로딩됨
     @Enumerated(EnumType.STRING) // 그걸 문자열로 저장함
     private Set<Role> roles; // 사용자의 역할 정보를 나타내는 필드
 
     @OneToMany(mappedBy = "authUser", cascade = CascadeType.ALL)
     private List<DeviceAuthEntity> deviceAuthEntity;
+
+    @ElementCollection
+    @CollectionTable(name = "user_tokens", joinColumns = @JoinColumn(name = "username"))
+    private List<String> token;
 
     public List<String> getRoleList() {
         List<String> roleList = new ArrayList<>();
