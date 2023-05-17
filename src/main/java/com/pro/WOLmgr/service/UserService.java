@@ -62,9 +62,9 @@ public class UserService {
     public UserInfoDTO readUser(String username){
         return userRepository.findByUsername(username).toDto();
     }
-    public boolean idCheck(String userid) { return userRepository.existsByUserId(userid); }
+    public boolean idCheck(String userid) { return !userRepository.existsByUserId(userid); }
     public boolean emailCheck(String email){
-        return userRepository.existsByEmail(email);
+        return !userRepository.existsByEmail(email);
     }
     public boolean userNameCheck(String userName){
         return userRepository.existsByUsername(userName);

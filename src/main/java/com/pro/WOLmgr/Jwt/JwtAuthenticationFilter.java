@@ -82,7 +82,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String jwtToken = JWT.create()
                 .withSubject(principalDetails.getUsername()) // 의미 없음 토큰 이름
                 .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 만료시간 밀리초단위
-                .withClaim("userId", principalDetails.getUserEntity().getUserId()) // 유저 아이디 비공개 클레임 내가 넣고싶은거 암거나 넣으면 댐
+                .withClaim("username", principalDetails.getUserEntity().getUsername()) // 유저 아이디 비공개 클레임 내가 넣고싶은거 암거나 넣으면 댐
                 .withClaim("userRole", principalDetails.getUserEntity().getRoleList()) // 유저 권한
                 .sign(Algorithm.HMAC512(env.getProperty("jwt_secret"))); // 내 서버의 암호 암호는 서버가 마음대로 만들면됨
 

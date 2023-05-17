@@ -47,7 +47,7 @@ public class DeviceService {
     public boolean deviceNameCheck(String deviceName) { return deviceRepository.existsByDeviceName(deviceName); }
 
     public DeviceAuthDTO accessRegister(DeviceAuthDTO dto){
-
+        log.info(dto);
         for (int i = 0; i < dto.getDeviceId().size(); i++) {
             DeviceAuthId deviceAuthId = DeviceAuthId
                     .builder()
