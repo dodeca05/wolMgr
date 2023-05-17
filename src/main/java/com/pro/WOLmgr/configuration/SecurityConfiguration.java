@@ -37,6 +37,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**")
                 // 'ROLE_USER', 'ROLE_MANAGER', 'ROLE_ADMIN' 권한을 가진 사용자만 접근 가능
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+                // 'ROLE_USER', 'ROLE_MANAGER', 'ROLE_ADMIN' 권한을 가진 사용자만 접근 가능
+
                 // "/manager/**" 패턴에 대한 요청은
                 .antMatchers("/manager/**")
                 // 'ROLE_MANAGER', 'ROLE_ADMIN' 권한을 가진 사용자만 접근 가능

@@ -163,6 +163,8 @@ function login() {
                 function (result) {
                     // 로그인 성공시 로컬스토리지에 토큰 저장함
                     localStorage.setItem("Authorization", result.Authorization);
+                    window.location.href = '/web/main'
+
                 },
                 function (error) {
                     alert('비밀번호가 일치하지 않습니다.');

@@ -7,10 +7,14 @@ import com.pro.WOLmgr.repository.UserRepository;
 import com.pro.WOLmgr.service.MailService;
 import com.pro.WOLmgr.service.UserService;
 import com.pro.WOLmgr.util.Role;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -41,42 +45,42 @@ public class UserController {
     }
 
     @GetMapping("/member")
-    public ResponseEntity<List<UserInfoDTO>> readUserList(){
-        return new ResponseEntity<>(userService.readUserList(),HttpStatus.OK);
+    public ResponseEntity<List<UserInfoDTO>> readUserList() {
+        return new ResponseEntity<>(userService.readUserList(), HttpStatus.OK);
     }
 
     @GetMapping("/member/{username}")
-    public ResponseEntity<UserInfoDTO> readUser(@PathVariable String username){
-        return new ResponseEntity<>(userService.readUser(username),HttpStatus.OK);
+    public ResponseEntity<UserInfoDTO> readUser(@PathVariable String username) {
+        return new ResponseEntity<>(userService.readUser(username), HttpStatus.OK);
     }
 
     @GetMapping("/username/duplication/{username}")
-    public ResponseEntity<Boolean> usernameCheck(@PathVariable String username){
-        return new ResponseEntity<>(userService.userNameCheck(username),HttpStatus.OK);
+    public ResponseEntity<Boolean> usernameCheck(@PathVariable String username) {
+        return new ResponseEntity<>(userService.userNameCheck(username), HttpStatus.OK);
     }
 
     @GetMapping("/id/duplication/{userId}") // 아이디 중복 체크
-    public ResponseEntity<Boolean> idCheck(@PathVariable String userId){
+    public ResponseEntity<Boolean> idCheck(@PathVariable String userId) {
         return new ResponseEntity<>(userService.idCheck(userId), HttpStatus.OK);
     }
 
-    @GetMapping("/email/duplication/{email}") // 이메일 중복 체크
-    public ResponseEntity<Boolean> emailCheck(@PathVariable String email){
-        return new ResponseEntity<>(userService.emailCheck(email), HttpStatus.OK);
+    @GetMapping("/auth/check")
+    public @ResponseBody ResponseEntity getAuthState(@RequestHeader("Authorization") String authorizationHeader) {
+        //Todo : 토큰에 문제 있으면 알아서 Exception 나온다 지금은 토큰에 문제가 있으면 500에러가 나온다. 이를 바꿔주는 코드 추가
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/auth/duplication/{token}")
-    public void example(@PathVariable String token, HttpServletResponse response) {
-        response.setHeader("Authorization", token);
+    @GetMapping("/email/duplication/{email}") // 이메일 중복 체크
+    public ResponseEntity<Boolean> emailCheck(@PathVariable String email) {
+        return new ResponseEntity<>(userService.emailCheck(email), HttpStatus.OK);
     }
 
     @PostMapping("/member") // 회원가입
     public ResponseEntity<UserInfoDTO> join(@RequestBody UserPrivacyDTO userDTO,
-                                            @RequestHeader(value = "Authorization", required = false) String value){
-        if( value == null || value.isEmpty() || new JwtTokenReader(env,userRepository).jwtReader(value) == null){
+                                            @RequestHeader(value = "Authorization", required = false) String value) {
+        if (value == null || value.isEmpty() || new JwtTokenReader(env, userRepository).jwtReader(value) == null) {
             userDTO.setRoles(Collections.singleton(USER));
         }
-        return new ResponseEntity<>(userService.userCreate(userDTO),HttpStatus.OK);
+        return new ResponseEntity<>(userService.userCreate(userDTO), HttpStatus.OK);
     }
-
 }
