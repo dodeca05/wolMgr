@@ -16,21 +16,12 @@ public class DeviceRequestDTO {
     private String macAddress;
     private String ipAddress;
 
-    public DeviceEntity toEntity(DeviceRequestDTO dto) {
+    public static DeviceEntity fromDTO(DeviceRequestDTO dto) {
         return DeviceEntity
                 .builder()
                 .deviceName(dto.getDeviceName())
                 .macAddress(dto.getMacAddress())
                 .ipAddress(dto.getIpAddress())
-                .build();
-    }
-
-    public DeviceRequestDTO toDTO(DeviceEntity entity) {
-        return DeviceRequestDTO
-                .builder()
-                .deviceName(entity.getDeviceName())
-                .macAddress(entity.getMacAddress())
-                .ipAddress(entity.getIpAddress())
                 .build();
     }
 

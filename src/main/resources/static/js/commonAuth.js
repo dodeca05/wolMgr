@@ -2,7 +2,6 @@ function authCheck() {
 
     let Authorization = localStorage.getItem("Authorization");
 
-
     $.ajax({
         type: 'GET',
         url: '/auth/check',
@@ -16,14 +15,11 @@ function authCheck() {
             window.location.href = '/'
         }
     });
-
 }
 
 function logout() {
     localStorage.setItem("Authorization", "");
 }
-
-
 
 $(document).ready(function () {
     authCheck();

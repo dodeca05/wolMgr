@@ -2,6 +2,8 @@ package com.pro.WOLmgr.Jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.pro.WOLmgr.entity.UserEntity;
 import com.pro.WOLmgr.repository.UserRepository;
 import com.pro.WOLmgr.util.PrincipalDetails;
@@ -40,7 +42,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain chain) throws IOException, ServletException {
+                                    FilterChain chain)
+            throws IOException,
+            ServletException {
 
         // HTTP 요청 헤더에서 "Authorization" 헤더의 값을 가져옵니다.
         String jwtHeader = request.getHeader("Authorization");
@@ -54,18 +58,27 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         // "Authorization" 헤더의 값을 가져와 "Bearer " 부분을 제거하여 JWT 토큰을 추출합니다.
         String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
 
+        String username = null;
+
+        try {
+            username = JWT
+                    .require(Algorithm.HMAC512(env.getProperty("jwt_secret")))
+                    .build()
+                    .verify(jwtToken)
+                    .getClaim("username") // 토큰의 "userId" 클레임 값을 가져옵니다.
+                    .asString(); // "userId" 값을 문자열로 변환합니다.
+
+        }catch (JWTDecodeException | SignatureVerificationException e) {
+            chain.doFilter(request, response);
+        }
+
         // JWT 토큰의 서명 알고리즘과 비밀 키를 설정하여 토큰을 검증합니다.
-        String userId = JWT
-                .require(Algorithm.HMAC512(env.getProperty("jwt_secret")))
-                .build()
-                .verify(jwtToken)
-                .getClaim("userId") // 토큰의 "userId" 클레임 값을 가져옵니다.
-                .asString(); // "userId" 값을 문자열로 변환합니다.
 
         // 서명이 유효한 경우
-        if (userId != null) {
+        if (username != null) {
             // "userId" 값을 사용하여 사용자 정보를 조회합니다.
-            UserEntity userEntity = userRepository.findByUserId(userId);
+
+            UserEntity userEntity = userRepository.findByUsername(username);
 
 
             // 사용자 정보를 기반으로 PrincipalDetails 객체를 생성합니다.

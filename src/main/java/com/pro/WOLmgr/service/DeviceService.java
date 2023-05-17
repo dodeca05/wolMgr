@@ -1,7 +1,6 @@
 package com.pro.WOLmgr.service;
 
-import com.pro.WOLmgr.dto.DeviceAuthRequestDTO;
-import com.pro.WOLmgr.dto.DeviceAuthResponseDTO;
+import com.pro.WOLmgr.dto.DeviceAuthDTO;
 import com.pro.WOLmgr.dto.DeviceRequestDTO;
 import com.pro.WOLmgr.dto.DeviceResponseDTO;
 import com.pro.WOLmgr.entity.DeviceAuthEntity;
@@ -28,7 +27,7 @@ public class DeviceService {
     private final DeviceAuthRepository deviceAuthRepository;
 
     public DeviceResponseDTO register(DeviceRequestDTO deviceRequestDTO){
-        DeviceEntity deviceEntity = new DeviceRequestDTO().toEntity(deviceRequestDTO);
+        DeviceEntity deviceEntity = DeviceRequestDTO.fromDTO(deviceRequestDTO);
         DeviceResponseDTO responseDTO = DeviceResponseDTO.fromEntity(deviceRepository.save(deviceEntity));
         return responseDTO;
     }
@@ -36,8 +35,6 @@ public class DeviceService {
     public DeviceResponseDTO updateDevice(DeviceRequestDTO deviceRequestDTO){
 
     }*/
-
-
 
     @Transactional
     public void delete(String deviceName){
@@ -49,44 +46,33 @@ public class DeviceService {
     }
     public boolean deviceNameCheck(String deviceName) { return deviceRepository.existsByDeviceName(deviceName); }
 
-    public boolean accessCheck(DeviceAuthRequestDTO deviceAuthRequestDTO){
-        Optional<UserEntity> user = userRepository.findById(deviceAuthRequestDTO.getUserId());
-        Optional<DeviceEntity> device = deviceRepository.findById(deviceAuthRequestDTO.getDeviceId());
+    public DeviceAuthDTO accessRegister(DeviceAuthDTO dto){
+        log.info(dto);
+        for (int i = 0; i < dto.getDeviceId().size(); i++) {
+            DeviceAuthId deviceAuthId = DeviceAuthId
+                    .builder()
+                    .authDevice(dto.getDeviceId().get(i))
+                    .authUser(dto.getUserId())
+                    .build();
+            DeviceAuthEntity deviceAuthEntity = DeviceAuthEntity
+                    .builder()
+                    .id(deviceAuthId)
+                    .build();
 
-        boolean isAuth = false;
-
-        if(user.isPresent()&&device.isPresent()){
-            isAuth = deviceAuthRepository.existsByAuthUserAndAuthDevice(user.get(),device.get());
+            deviceAuthRepository.save(deviceAuthEntity);
         }
-
-        return isAuth;
+        return dto;
     }
 
-    public DeviceAuthResponseDTO accessRegister(DeviceAuthRequestDTO deviceAuthRequestDTO){
-
-        DeviceAuthId deviceAuthId = DeviceAuthId
-                .builder()
-                .authDevice(deviceAuthRequestDTO.getDeviceId())
-                .authUser(deviceAuthRequestDTO.getUserId())
-                .build();
-        DeviceAuthEntity deviceAuthEntity = DeviceAuthEntity
-                .builder()
-                .id(deviceAuthId)
-                .build();
-
-        deviceAuthRepository.save(deviceAuthEntity);
-
-        DeviceAuthResponseDTO deviceAuthResponseDTO = new DeviceAuthResponseDTO().toDTO(deviceAuthId);
-        return deviceAuthResponseDTO;
-    }
-
-    public void accessDelete(DeviceAuthRequestDTO deviceAuthRequestDTO){
-        DeviceAuthId deviceAuthId = DeviceAuthId
-                .builder()
-                .authDevice(deviceAuthRequestDTO.getDeviceId())
-                .authUser(deviceAuthRequestDTO.getUserId())
-                .build();
-        deviceAuthRepository.deleteById(deviceAuthId);
+    public void accessDelete(DeviceAuthDTO dto){
+        for (int i = 0; i < dto.getDeviceId().size(); i++) {
+            DeviceAuthId deviceAuthId = DeviceAuthId
+                    .builder()
+                    .authDevice(dto.getDeviceId().get(i))
+                    .authUser(dto.getUserId())
+                    .build();
+            deviceAuthRepository.deleteById(deviceAuthId);
+        }
     }
 
     public DeviceEntity getDeviceEntity(String deviceName) {
@@ -99,6 +85,20 @@ public class DeviceService {
         List<DeviceResponseDTO> result=new ArrayList<>();
         for (DeviceEntity temp:deviceEntity) {
             result.add(DeviceResponseDTO.fromEntity(temp));
+        }
+        return result;
+    }
+
+    public List<DeviceResponseDTO> userAccessDevices(String username){
+        UserEntity user = userRepository.findByUsername(username);
+        List<DeviceAuthEntity> deviceAuthEntities = deviceAuthRepository.findByAuthUser(user);
+        List<DeviceResponseDTO> result = new ArrayList<>();
+        for (DeviceAuthEntity temp: deviceAuthEntities) {
+            result.add(DeviceResponseDTO
+                    .fromEntity(deviceRepository
+                            .findByDeviceName(
+                                    temp.getAuthDevice().getDeviceName())
+                            .get()));
         }
         return result;
     }

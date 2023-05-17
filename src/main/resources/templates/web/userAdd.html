@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+
+    <title>Wake On Lan Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/standard_style.css" type="text/css">
+</head>
+<body>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.0/css/boxicons.min.css"
+      integrity="sha512-pVCM5+SN2+qwj36KonHToF2p1oIvoU3bsqxphdOIWMYmgr4ZqD3t5DjKvvetKhXGc/ZG5REYTT6ltKfExEei/Q=="
+      crossorigin="anonymous" referrerpolicy="no-referrer"/>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.css"
+      integrity="sha256-NAxhqDvtY0l4xn+YVa6WjAcmd94NNfttjNsDmNatFVc=" crossorigin="anonymous"/>
+<div class="container">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <h1 class="card-title">Wake On Lan Manager</h1><br>
+                <h5 class="card-title" id="subTitle">Add New User <span class="text-muted fw-normal ms-2"></span></h5>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3">
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="">
+                <div class="table-responsive">
+                    <label>User Name</label><br>
+                    <input type="text" id="userName" name="userName"><br>
+                    <label>User ID</label><br>
+                    <input type="text" id="userId" name="userId"><br>
+                    <label>Password</label><br>
+                    <input type="password" id="password" name="password"><br>
+                    <label>User Email</label><br>
+                    <input type="email" id="email" name="email"><br>
+                    <label>User Role</label><br>
+                    <select name="userRole" id="userRole">
+                        <option value="">--Please choose an option--</option>
+                        <option value="USER">USER</option>
+                        <option value="SERVICE">SERVICE</option>
+                        <option value="MANAGER">MANAGER</option>
+                        <option value="ADMIN">ADMIN</option>
+                    </select><br><br>
+                    Accessable Device<br>
+                    <div id="deviceList">
+                    </div>
+                    <br><br>
+                </div>
+            </div>
+        </div>
+        <div>
+            <button onclick="sendPCinfo()" data-bs-toggle="modal" data-bs-target=".add-new" class="btn btn-primary" id="btn"><i
+                    class="bx bx-plus me-1"></i> Add New</button>
+        </div>
+    </div>
+    <div class="row g-0 align-items-center pb-4">
+        <div class="col-sm-6">
+            <div><p class="mb-sm-0">by Dodeca toy project</p></div>
+        </div>
+    </div>
+</div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+    function sendPCinfo(){
+
+        // "device" 이름을 가진 모든 체크된 체크박스를 찾습니다.
+        let checkboxes = $('input[name="device"]:checked');
+
+        // 선택된 값을 저장할 배열을 생성합니다.
+        let selectedDevices = [];
+
+        // 각 체크된 체크박스를 반복하면서 해당 값을 배열에 추가합니다.
+        checkboxes.each(function() {
+            selectedDevices.push($(this).val());
+        });
+
+        $.ajax({
+            url: "/username/duplication/"+userName,
+            type: "GET",
+            contentType: "application/json",
+            success: function(data) {
+                if(data){
+                    accessDeviceDelete(accessableDevice,selectedDevices);
+                }else{
+                    memberSend(selectedDevices);
+                }
+            },
+            error: function(request,status,error) {
+                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+
+    }
+
+    function memberSend(selectedDevices){
+        $.ajax({
+            url: "/member",
+            type: method,
+            data: JSON.stringify({
+                "username":$("#userName").val(),
+                "userId":$("#userId").val(),
+                "password":$("#password").val(),
+                "email":$("#email").val(),
+                "roles":[$("#userRole").val()]
+            }),
+            contentType: "application/json",
+            success: function(data) {
+                accessDeviceAdd(selectedDevices);
+            },
+            error: function(request,status,error) {
+                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+
+    function accessDeviceAdd(selectedDevices){
+        $.ajax({
+            url: "/access",
+            type: "POST",
+            data: JSON.stringify({
+                "userId":$("#userName").val(),
+                "deviceId": selectedDevices
+            }),
+            contentType: "application/json",
+            success: function(data) {
+                if(method=="POST")
+                    alert("등록되었습니다");
+                else
+                    alert("수정되었습니다");
+                window.location.href = '/web/index'
+            },
+            error: function(request,status,error) {
+                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+
+    function accessDeviceDelete(accessableDevice,selectedDevices){
+        $.ajax({
+            url: "/access",
+            type: "DELETE",
+            data: JSON.stringify({
+                "userId":$("#userName").val(),
+                "deviceId": accessableDevice
+            }),
+            contentType: "application/json",
+            success: function(data) {
+                memberSend(selectedDevices);
+            },
+            error: function(request,status,error) {
+                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+            }
+        });
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const userName = urlParams.get('name');
+    let accessableDevice = [];
+    let method="POST"
+    if(userName!=null)
+        {
+            $("#subTitle").text("Update User info");
+            $("#btn").text("EDIT");
+            method="PUT"
+            $.ajax({
+                url:"/member/"+userName,
+                type: "GET",
+                contentType: "application/json",
+                success: function (result){
+                    $("#userName").val(result["username"]);
+                    $("#userId").val(result["userId"]);
+                    $("#email").val(result["email"]);
+                    $("#userRole").val(result["roles"]);
+                    $('#password').prop('readonly', true);
+                    $('#password').css('background-color', 'gray');
+                },
+                error: function (request,status,error){
+                    alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+                }
+            })
+        }
+    $.ajax({
+        url:"/device?username="+userName,
+        type:"GET",
+        success: function(result) {
+            if (result) {
+                result.forEach(function (data){
+                    accessableDevice.push(data["deviceName"]);
+                })
+                $.ajax({
+                    url:"/device",
+                    type:"GET",
+                    success: function(result) {
+                        if (result) {
+                            result.forEach(function (data){
+                                deviceName=data["deviceName"]
+                                ipAdress=data["ipAddress"]
+                                let checked = "";
+                                for (let index = 0; index < accessableDevice.length; index++) {
+                                    if(accessableDevice[index] == deviceName){
+                                        checked = 'checked="checked"';
+                                    }
+                                }
+                                var form = `<input type='checkbox' name='device' value='${deviceName}' ${checked} />${deviceName}<br>`;
+                    $('#deviceList').append(form);
+                })
+            } else {
+                alert("불러오기 실패");
+            }
+        }
+    });
+            } else {
+                alert("불러오기 실패");
+            }
+        }
+    });
+</script>
+</body>
+</html>

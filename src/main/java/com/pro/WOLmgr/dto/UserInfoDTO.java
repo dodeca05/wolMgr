@@ -19,16 +19,4 @@ public class UserInfoDTO {
     private String email;
     private Set<Role> roles;
 
-    // entity를 DTO로 변환함
-
-    public static UserInfoDTO toDto(UserEntity userEntity) {
-
-        return UserInfoDTO
-                .builder()
-                .userId(userEntity.getUserId())
-                .username(userEntity.getUsername())
-                .email(userEntity.getEmail())
-                .roles(userEntity.getRoles())
-                .build();
-    }
 }

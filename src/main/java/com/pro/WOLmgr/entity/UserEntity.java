@@ -1,5 +1,6 @@
 package com.pro.WOLmgr.entity;
 
+import com.pro.WOLmgr.dto.UserInfoDTO;
 import com.pro.WOLmgr.util.Role;
 import lombok.*;
 
@@ -33,11 +34,31 @@ public class UserEntity {
     @OneToMany(mappedBy = "authUser", cascade = CascadeType.ALL)
     private List<DeviceAuthEntity> deviceAuthEntity;
 
+    @ElementCollection
+    @CollectionTable(name = "user_tokens", joinColumns = @JoinColumn(name = "username"))
+    private List<String> token;
+
     public List<String> getRoleList() {
         List<String> roleList = new ArrayList<>();
         for (Role role : roles) {
             roleList.add(role.name());
         }
         return roleList;
+    }
+
+    public void change(UserInfoDTO dto){
+        this.userId = dto.getUserId();
+        this.email = dto.getEmail();
+        this.roles = dto.getRoles();
+    }
+
+    public UserInfoDTO toDto(){
+        return UserInfoDTO
+                .builder()
+                .userId(userId)
+                .username(username)
+                .email(email)
+                .roles(roles)
+                .build();
     }
 }

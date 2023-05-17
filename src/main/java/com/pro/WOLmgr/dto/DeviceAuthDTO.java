@@ -8,20 +8,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeviceAuthRequestDTO {
+public class DeviceAuthDTO {
 
     private String userId;
-    private String deviceId;
+    private List<String> deviceId;
 
-    public DeviceAuthEntity toEntity(UserEntity user, DeviceEntity device){
-        return DeviceAuthEntity
-                .builder()
-                .authUser(user)
-                .authDevice(device)
-                .build();
-    }
 }
