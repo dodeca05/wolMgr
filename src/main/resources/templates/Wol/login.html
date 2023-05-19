@@ -41,31 +41,23 @@
                 alert("에러발생");
             }
         });
-    });
+        $.ajax({
+            type: 'GET',
+            url: '/auth/check',
+            dataType: 'JSON',
+            contentType: 'application/json; charset=UTF-8',
+            headers: {
+                'Authorization': Authorization
+            },
+            success: function (result) {
+                window.location.href = '/web/main'
+            },
+            error: function (request, status, error) {
+            }
 
-function authCheck() {
+        });
 
-    let Authorization = localStorage.getItem("Authorization");
-
-
-    $.ajax({
-        type: 'GET',
-        url: '/auth/check',
-        dataType: 'JSON',
-        contentType: 'application/json; charset=UTF-8',
-        headers: {
-            'Authorization': Authorization
-        },
-        success: function (result){
-            window.location.href = '/web/main'
-        },
-        error: function (request, status, error) {
-        }
-    });
-
-}
-    $(document).ready(function () {
-        authCheck();
-    });
+    }
+    )
 </script>
 </html>
