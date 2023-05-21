@@ -47,21 +47,24 @@ function authCheck() {
 
     let Authorization = localStorage.getItem("Authorization");
 
+    if(Authorization!="") {
 
-    $.ajax({
-        type: 'GET',
-        url: '/auth/check',
-        dataType: 'JSON',
-        contentType: 'application/json; charset=UTF-8',
-        headers: {
-            'Authorization': Authorization
-        },
-        success: function (result){
-            window.location.href = '/web/main'
-        },
-        error: function (request, status, error) {
-        }
-    });
+        $.ajax({
+            type: 'GET',
+            url: '/auth/check',
+            dataType: 'JSON',
+            contentType: 'application/json; charset=UTF-8',
+            headers: {
+                'Authorization': Authorization
+            },
+            success: function (result) {
+                window.location.href = '/web/main'
+            },
+            error: function (request, status, error) {
+                localStorage.setItem("Authorization", "");
+            }
+        });
+    }
 
 }
     $(document).ready(function () {

@@ -65,9 +65,10 @@ public class UserController {
     }
 
     @GetMapping("/auth/check")
-    public @ResponseBody ResponseEntity getAuthState(@RequestHeader("Authorization") String authorizationHeader) {
+    public @ResponseBody String getAuthState(@RequestHeader("Authorization") String authorizationHeader) {
         //Todo : 토큰에 문제 있으면 알아서 Exception 나온다 지금은 토큰에 문제가 있으면 500에러가 나온다. 이를 바꿔주는 코드 추가
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        //Todo : RoelDto 추가 ?
+        return "{ \"roel\" : \""+new JwtTokenReader(env,userRepository,authorizationHeader).getRole().toString()+"\"}";
     }
 
     @GetMapping("/email/duplication/{email}") // 이메일 중복 체크
@@ -77,8 +78,8 @@ public class UserController {
 
     @PostMapping("/member") // 회원가입
     public ResponseEntity<UserInfoDTO> join(@RequestBody UserPrivacyDTO userDTO,
-                                            @RequestHeader(value = "Authorization", required = false) String value) {
-        if (value == null || value.isEmpty() || new JwtTokenReader(env, userRepository).jwtReader(value) == null) {
+                                            @RequestHeader(value = "Authorization", required = false) String token) {
+        if (token == null || token.isEmpty() || new JwtTokenReader(env, userRepository,token).getRole() == null) {
             userDTO.setRoles(Collections.singleton(USER));
         }
         return new ResponseEntity<>(userService.userCreate(userDTO), HttpStatus.OK);
