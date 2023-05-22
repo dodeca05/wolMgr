@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,10 +32,6 @@ public class DeviceService {
         DeviceResponseDTO responseDTO = DeviceResponseDTO.fromEntity(deviceRepository.save(deviceEntity));
         return responseDTO;
     }
-    /*
-    public DeviceResponseDTO updateDevice(DeviceRequestDTO deviceRequestDTO){
-
-    }*/
 
     @Transactional
     public void delete(String deviceName){
@@ -47,7 +44,6 @@ public class DeviceService {
     public boolean deviceNameCheck(String deviceName) { return deviceRepository.existsByDeviceName(deviceName); }
 
     public DeviceAuthDTO accessRegister(DeviceAuthDTO dto){
-        log.info(dto);
         for (int i = 0; i < dto.getDeviceId().size(); i++) {
             DeviceAuthId deviceAuthId = DeviceAuthId
                     .builder()
@@ -58,7 +54,6 @@ public class DeviceService {
                     .builder()
                     .id(deviceAuthId)
                     .build();
-
             deviceAuthRepository.save(deviceAuthEntity);
         }
         return dto;
@@ -76,17 +71,15 @@ public class DeviceService {
     }
 
     public DeviceEntity getDeviceEntity(String deviceName) {
-        Optional<DeviceEntity> deviceEntity=deviceRepository.findByDeviceName(deviceName);
-        return deviceEntity.get();
+        return deviceRepository.findByDeviceName(deviceName);
     }
 
-    public List<DeviceResponseDTO>readDeviceList(){
-        List<DeviceEntity> deviceEntity=deviceRepository.findAll();
-        List<DeviceResponseDTO> result=new ArrayList<>();
-        for (DeviceEntity temp:deviceEntity) {
-            result.add(DeviceResponseDTO.fromEntity(temp));
-        }
-        return result;
+    public List<DeviceResponseDTO> readDeviceList(){
+        return deviceRepository
+                .findAll()
+                .stream()
+                .map(device -> DeviceResponseDTO.fromEntity(device))
+                .collect(Collectors.toList());
     }
 
     public List<DeviceResponseDTO> userAccessDevices(String username){
@@ -97,8 +90,7 @@ public class DeviceService {
             result.add(DeviceResponseDTO
                     .fromEntity(deviceRepository
                             .findByDeviceName(
-                                    temp.getAuthDevice().getDeviceName())
-                            .get()));
+                                    temp.getAuthDevice().getDeviceName())));
         }
         return result;
     }
