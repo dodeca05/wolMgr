@@ -36,6 +36,7 @@
                 <div class="table-responsive">
                     <label>User Name</label><br>
                     <input type="text" id="userName" name="userName"><br>
+                    <input type="hidden" id="oldName" name="oldName"><br>
                     <label>User ID</label><br>
                     <input type="text" id="userId" name="userId"><br>
                     <label>Password</label><br>
@@ -108,12 +109,14 @@
             url: "/member",
             type: method,
             data: JSON.stringify({
+                "oldName":$("#oldName").val(),
                 "username":$("#userName").val(),
                 "userId":$("#userId").val(),
                 "password":$("#password").val(),
                 "email":$("#email").val(),
                 "roles":[$("#userRole").val()]
             }),
+            headers: {"Authorization": localStorage.getItem("Authorization")},
             contentType: "application/json",
             success: function(data) {
                 accessDeviceAdd(selectedDevices);
@@ -151,7 +154,7 @@
             url: "/access",
             type: "DELETE",
             data: JSON.stringify({
-                "userId":$("#userName").val(),
+                "userId":$("#oldName").val(),
                 "deviceId": accessableDevice
             }),
             contentType: "application/json",
@@ -179,6 +182,7 @@
                 contentType: "application/json",
                 success: function (result){
                     $("#userName").val(result["username"]);
+                    $("#oldName").val(result["username"]);
                     $("#userId").val(result["userId"]);
                     $("#email").val(result["email"]);
                     $("#userRole").val(result["roles"]);

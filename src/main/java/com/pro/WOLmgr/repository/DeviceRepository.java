@@ -10,8 +10,6 @@ public interface DeviceRepository extends JpaRepository<DeviceEntity,String> {
 
     boolean existsByMacAddress(String ip);
     boolean existsByDeviceName(String name);
-
     void deleteByDeviceName(String deviceName);
-
-    Optional<DeviceEntity> findByDeviceName(String deviceName);
+    DeviceEntity findByDeviceName(String deviceName);
 }

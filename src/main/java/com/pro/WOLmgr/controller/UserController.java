@@ -78,7 +78,7 @@ public class UserController {
     @PostMapping("/member") // 회원가입
     public ResponseEntity<UserInfoDTO> join(@RequestBody UserPrivacyDTO userDTO,
                                             @RequestHeader(value = "Authorization", required = false) String value) {
-        if (value == null || value.isEmpty() || new JwtTokenReader(env, userRepository).jwtReader(value) == null) {
+        if (value.isEmpty() || new JwtTokenReader(env, userRepository).jwtReader(value) == null) {
             userDTO.setRoles(Collections.singleton(USER));
         }
         return new ResponseEntity<>(userService.userCreate(userDTO), HttpStatus.OK);

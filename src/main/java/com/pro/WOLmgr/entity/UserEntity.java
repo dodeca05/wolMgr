@@ -47,6 +47,7 @@ public class UserEntity {
     }
 
     public void change(UserInfoDTO dto){
+        this.username = dto.getUsername();
         this.userId = dto.getUserId();
         this.email = dto.getEmail();
         this.roles = dto.getRoles();
