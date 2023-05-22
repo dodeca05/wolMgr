@@ -71,9 +71,13 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript">
     function wakeOnLan(deviceName){
+        let token = localStorage.getItem("Authorization");
         $.ajax({
             url:"/wake/"+deviceName,
             type: "PUT",
+            headers: {
+                'Authorization': token
+            },
             success: function (result){
                 alert("패킷 전송 성공")
             },
