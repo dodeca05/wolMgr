@@ -41,6 +41,15 @@
                 alert("에러발생");
             }
         });
+
+    });
+
+function authCheck() {
+
+    let Authorization = localStorage.getItem("Authorization");
+
+    if(Authorization!="") {
+
         $.ajax({
             type: 'GET',
             url: '/auth/check',
@@ -53,9 +62,11 @@
                 window.location.href = '/web/main'
             },
             error: function (request, status, error) {
+                localStorage.setItem("Authorization", "");
             }
-
         });
+    }
+
 
     }
     )

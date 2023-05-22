@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.pro.WOLmgr.entity.UserEntity;
 import com.pro.WOLmgr.repository.UserRepository;
 import com.pro.WOLmgr.util.Role;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.env.Environment;
@@ -16,18 +17,19 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Log4j2
 public class JwtTokenReader {
 
-    private final Environment env;
-    private final UserRepository userRepository;
+    private Environment env;
+    private UserRepository userRepository;
+    private String token;
 
-    public Role jwtReader(String value)
+    public String getName()
             throws
             JWTDecodeException,
             SignatureVerificationException {
-        String token = value.replace("Bearer ", "");
+        String token = this.token.replace("Bearer ", "");
 
         String username = JWT
                 .require(Algorithm.HMAC512(env.getProperty("jwt_secret")))
@@ -35,6 +37,17 @@ public class JwtTokenReader {
                 .verify(token)
                 .getClaim("username") // 토큰의 "username" 클레임 값을 가져옵니다.
                 .asString(); // "username" 값을 문자열로 변환합니다.
+
+        return username;
+    }
+
+    public Role getRole()
+            throws
+            JWTDecodeException,
+            SignatureVerificationException {
+        String token = this.token.replace("Bearer ", "");
+
+        String username = this.getName();
 
         if (username != null) {
             UserEntity userEntity = userRepository.findByUsername(username);
