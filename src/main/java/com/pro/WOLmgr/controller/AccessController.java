@@ -34,7 +34,7 @@ public class AccessController {
         {
             throw new AccessException("권한이 없습니다.");
         } else if (role==Role.MANAGER) {
-            throw new NotImplementedException("구현이 되지 않은 기능입니다.");
+            throw new NotImplementedException("구현이 되지 않은 기화입니다.");
         }
         return new ResponseEntity<>(deviceService.accessRegister(deviceAuthDTO),HttpStatus.OK);
     }
