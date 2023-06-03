@@ -30,13 +30,20 @@ public class AccessController {
     public ResponseEntity<DeviceAuthDTO> accessCreate(@RequestBody DeviceAuthDTO deviceAuthDTO,@RequestHeader("Authorization") String authorizationHeader) throws AccessException {
         JwtTokenReader tokenReader=new JwtTokenReader(env,userRepository,authorizationHeader);
         Role role=tokenReader.getRole();
+        String userName=tokenReader.getName();
         if(role== Role.USER)
         {
             throw new AccessException("권한이 없습니다.");
         } else if (role==Role.MANAGER) {
-            throw new NotImplementedException("구현이 되지 않은 기화입니다.");
+            for(String deviceName : deviceAuthDTO.getDeviceId()) {
+                if(!deviceService.hasUserPermission(userName, deviceName))
+                {
+                    deviceAuthDTO.getDeviceId().remove(deviceName);//권한 없으면 빼자
+                }
+            }
         }
-        return new ResponseEntity<>(deviceService.accessRegister(deviceAuthDTO),HttpStatus.OK);
+        return new ResponseEntity<>(deviceService.accessRegister(deviceAuthDTO), HttpStatus.OK);
+
     }
 
     @DeleteMapping("/access")
