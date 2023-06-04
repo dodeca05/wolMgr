@@ -27,7 +27,6 @@ public class SwaggerConfiguration {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("WOLMgr Swagger")
-                .description("Description")
                 .version("1.0.0")
                 .build();
     }
