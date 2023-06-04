@@ -29,30 +29,22 @@ public class JwtTokenReader {
             throws
             JWTDecodeException,
             SignatureVerificationException {
-        String token = this.token.replace("Bearer ", "");
-
-        String username = JWT
+        return JWT
                 .require(Algorithm.HMAC512(env.getProperty("jwt_secret")))
                 .build()
-                .verify(token)
+                .verify(this.token.replace("Bearer ", ""))
                 .getClaim("username") // 토큰의 "username" 클레임 값을 가져옵니다.
-                .asString(); // "username" 값을 문자열로 변환합니다.
-
-        return username;
+                .asString(); // "username" 값을 문자열로 변환합니다.;
     }
 
     public Role getRole()
             throws
             JWTDecodeException,
             SignatureVerificationException {
-        String token = this.token.replace("Bearer ", "");
 
         String username = this.getName();
-
-        if (username != null) {
-            UserEntity userEntity = userRepository.findByUsername(username);
-            return Role.valueOf(userEntity.getRoleList().get(0));
-        }
+        if (username != null)
+            return Role.valueOf( userRepository.findByUsername(username).getRoleList().get(0));
 
         return null;
     }

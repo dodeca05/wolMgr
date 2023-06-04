@@ -31,11 +31,8 @@
             url: "/checkEmail",
             dataType: 'JSON',
             success: function (result) {
-                if (result.key) {
-                    $.getScript("/js/login.js");
-                } else {
-                    $.getScript("/js/isEmail.js");
-                }
+                if (result) $.getScript("/js/login.js");
+                else $.getScript("/js/isEmail.js");
             },
             error: function (error) {
                 alert("에러발생");

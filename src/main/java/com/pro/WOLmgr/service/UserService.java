@@ -6,7 +6,6 @@ import com.pro.WOLmgr.dto.UserInfoDTO;
 import com.pro.WOLmgr.dto.UserPrivacyDTO;
 import com.pro.WOLmgr.entity.UserEntity;
 import com.pro.WOLmgr.repository.UserRepository;
-import com.pro.WOLmgr.util.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.env.Environment;

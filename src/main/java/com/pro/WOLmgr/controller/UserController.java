@@ -84,4 +84,9 @@ public class UserController {
         }
         return new ResponseEntity<>(userService.userCreate(userDTO), HttpStatus.OK);
     }
+
+    @PutMapping("/member")
+    public UserInfoDTO updateUser(@RequestBody UserInfoDTO dto){
+        return userService.userUpdate(dto);
+    }
 }
