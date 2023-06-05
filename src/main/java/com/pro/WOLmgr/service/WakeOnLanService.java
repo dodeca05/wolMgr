@@ -46,15 +46,15 @@ public class WakeOnLanService {
     private static byte[] getMacBytes(String macAddress) throws IllegalArgumentException {
         byte[] bytes = new byte[6];
         String[] hex = macAddress.split("(\\:|\\-)");
-
-        if (hex.length != 6)
-            throw new IllegalArgumentException("Invalid MAC address");
-
+        if (hex.length != 6) {
+            throw new IllegalArgumentException("잘못된 MAC 주소입니다.");
+        }
         try {
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 6; i++) {
                 bytes[i] = (byte) Integer.parseInt(hex[i], 16);
+            }
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid MAC address", e);
+            throw new IllegalArgumentException("잘못된 MAC 주소입니다.", e);
         }
         return bytes;
     }

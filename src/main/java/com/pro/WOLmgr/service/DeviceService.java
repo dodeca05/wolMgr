@@ -29,7 +29,8 @@ public class DeviceService {
 
     public DeviceResponseDTO register(DeviceRequestDTO deviceRequestDTO){
         DeviceEntity deviceEntity = DeviceRequestDTO.fromDTO(deviceRequestDTO);
-        return DeviceResponseDTO.fromEntity(deviceRepository.save(deviceEntity));
+        DeviceResponseDTO responseDTO = DeviceResponseDTO.fromEntity(deviceRepository.save(deviceEntity));
+        return responseDTO;
     }
 
     @Transactional
@@ -86,18 +87,19 @@ public class DeviceService {
         List<DeviceAuthEntity> deviceAuthEntities = deviceAuthRepository.findByAuthUser(user);
         List<DeviceResponseDTO> result = new ArrayList<>();
         for (DeviceAuthEntity temp: deviceAuthEntities) {
-            String deviceName = temp.getAuthDevice().getDeviceName();
-            DeviceEntity device = deviceRepository.findByDeviceName(deviceName);
-            result.add(DeviceResponseDTO.fromEntity(device));
+            result.add(DeviceResponseDTO
+                    .fromEntity(deviceRepository
+                            .findByDeviceName(
+                                    temp.getAuthDevice().getDeviceName())));
         }
         return result;
     }
-
-    public boolean hasUserPermission(String userName,String deviceName) {
+    public boolean hasUserPermission(String userName,String deviceName)
+    {
         UserEntity user = userRepository.findByUsername(userName);
         List<DeviceAuthEntity> deviceAuthEntities = deviceAuthRepository.findByAuthUser(user);
-        for (DeviceAuthEntity temp : deviceAuthEntities) {
-            String permissonedDeviceName = temp.getAuthDevice().getDeviceName();
+        for (DeviceAuthEntity temp: deviceAuthEntities) {
+            String permissonedDeviceName=temp.getAuthDevice().getDeviceName();
             if(permissonedDeviceName.trim().equals(deviceName.trim()))
                 return true;
         }

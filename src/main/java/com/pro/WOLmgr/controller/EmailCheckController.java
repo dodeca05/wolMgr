@@ -13,9 +13,11 @@ import java.util.HashMap;
 public class EmailCheckController {
 
     @GetMapping("/checkEmail")
-    public @ResponseBody Boolean isEmail(){
-        if(CheckVariable.getInstance().isEmailSmtpCheck()) return true;
-        else return false;
+    public @ResponseBody HashMap<String,Boolean> isEmail(){
+        HashMap<String,Boolean> result = new HashMap<>();
+        if(CheckVariable.getInstance().isEmailSmtpCheck()) result.put("key",true);
+        else result.put("key",false);
+        return result;
     }
 
 }

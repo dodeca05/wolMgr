@@ -34,27 +34,36 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         log.info("jwt 로그인 시도중");
 
-        // 1. username, password 받아오기
-        ObjectMapper objectMapper = new ObjectMapper();
+        // 1. username, password 받아서
+
+        ObjectMapper om = new ObjectMapper();
+
         UserEntity userEntity = null;
         try {
-            userEntity = objectMapper.readValue(request.getInputStream(), UserEntity.class);
+            userEntity = om.readValue(request.getInputStream(), UserEntity.class);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        log.info(userEntity);
 
-        // 2. 인증 토큰 생성
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userEntity.getUserId(), userEntity.getPassword());
 
-        // 3. 인증 시도
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        // PrincipalDetailsService의 loadUserByUsername() 를 사용함
+        // DB에 있는 username과 password가 일치한다는 뜻
+        Authentication authentication =
+                authenticationManager.authenticate(authenticationToken);
 
-        // 4. 인증 완료 후 처리
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        log.info("로그인 완료: " + principalDetails.getUserEntity().getUserId());
+        log.info("로그인 완료 :" + principalDetails.getUserEntity().getUserId()); // 로그인 되면 뜸
+
+        // 세션에 authentication 이거 저장됨 => 로그인 되었다는 뜻
+        // 권한 관리를 시큐리티가 대신 해주기 때문에 편하려고 해주는 것
+        // jwt쓰기 때문에 세션을 만들 이유가 없지만 권한처리때문에 세션 사용함
 
         return authentication;
+
     }
 
     // 위 메소드 실행 후 인증이 되면 이 함수 실행
@@ -69,12 +78,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
+        //RSA방식 아님 hash 암호방식
         String jwtToken = JWT.create()
-                .withSubject(principalDetails.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 86400000)) // 1일 (24시간) 설정
-                .withClaim("username", principalDetails.getUserEntity().getUsername())
-                .withClaim("userRole", principalDetails.getUserEntity().getRoleList())
-                .sign(Algorithm.HMAC512(env.getProperty("jwt_secret")));
+                .withSubject(principalDetails.getUsername()) // 의미 없음 토큰 이름
+                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 만료시간 밀리초단위
+                .withClaim("username", principalDetails.getUserEntity().getUsername()) // 유저 아이디 비공개 클레임 내가 넣고싶은거 암거나 넣으면 댐
+                .withClaim("userRole", principalDetails.getUserEntity().getRoleList()) // 유저 권한
+                .sign(Algorithm.HMAC512(env.getProperty("jwt_secret"))); // 내 서버의 암호 암호는 서버가 마음대로 만들면됨
 
         response.addHeader("Authorization", "Bearer " + jwtToken);
 
@@ -86,5 +96,4 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(jsonResponse);
     }
-
 }

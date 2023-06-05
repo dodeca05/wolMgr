@@ -42,14 +42,18 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain chain) throws IOException, ServletException {
+                                    FilterChain chain)
+            throws IOException,
+            ServletException {
 
         // HTTP 요청 헤더에서 "Authorization" 헤더의 값을 가져옵니다.
         String jwtHeader = request.getHeader("Authorization");
 
         // "Authorization" 헤더가 없거나 "Bearer "로 시작하지 않으면 다음 필터로 이동합니다.
-        if (jwtHeader == null || !jwtHeader.startsWith("Bearer "))
+        if (jwtHeader == null || !jwtHeader.startsWith("Bearer ")) {
             chain.doFilter(request, response);
+            return;
+        }
 
         // "Authorization" 헤더의 값을 가져와 "Bearer " 부분을 제거하여 JWT 토큰을 추출합니다.
         String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
@@ -72,8 +76,16 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         // 서명이 유효한 경우
         if (username != null) {
+            // "userId" 값을 사용하여 사용자 정보를 조회합니다.
+
+            UserEntity userEntity = userRepository.findByUsername(username);
+
+
             // 사용자 정보를 기반으로 PrincipalDetails 객체를 생성합니다.
-            PrincipalDetails principalDetails = new PrincipalDetails(userRepository.findByUsername(username));
+            PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
+
+            // PrincipalDetails 객체의 권한 정보를 로그에 출력합니다.
+            log.info(principalDetails.getAuthorities());
 
             // 서명이 유효하면 Authentication 객체를 생성하여 SecurityContextHolder에 저장합니다.
             Authentication authentication =
@@ -82,6 +94,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                             principalDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+
+        // 다음 필터로 이동합니다.
         chain.doFilter(request, response);
     }
 }

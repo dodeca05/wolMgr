@@ -40,7 +40,9 @@ public class UserEntity {
 
     public List<String> getRoleList() {
         List<String> roleList = new ArrayList<>();
-        for (Role role : roles) roleList.add(role.name());
+        for (Role role : roles) {
+            roleList.add(role.name());
+        }
         return roleList;
     }
 

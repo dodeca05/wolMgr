@@ -19,6 +19,8 @@ import java.util.Random;
 @RequiredArgsConstructor
 @Log4j2
 public class MailService {
+
+    String emailTitle = "WOLMGR의 인증 이메일입니다.";
     private final JavaMailSender mailSender;
     private final Environment env;
 
@@ -27,7 +29,7 @@ public class MailService {
         int authNumber = makeRandomNumber();
         String setFrom = env.getProperty("auth_email"); // emailConfig에 설정한 자신의 이메일 주소를 입력
         String toMail = email;
-        String title = "WOLMGR의 인증 이메일입니다."; // 이메일 제목
+        String title = emailTitle; // 이메일 제목
         String msgg = getEmailTemplate(); // HTML 템플릿 파일에서 내용을 읽어옴
         msgg = msgg.replace("{authNumber}", Integer.toString(authNumber)); // {authNumber} 부분을 인증번호로 대체
         mailSend(setFrom, toMail, title, msgg);
@@ -35,7 +37,9 @@ public class MailService {
     }
 
     private int makeRandomNumber() {
-        return new Random().nextInt(888888) + 111111;
+        // 난수의 범위 111111 ~ 999999 (6자리 난수)
+        Random r = new Random();
+        return r.nextInt(888888) + 111111;
     }
 
     private String getEmailTemplate() throws IOException {
@@ -45,10 +49,11 @@ public class MailService {
         InputStream inputStream = getClass().getResourceAsStream(emailTemplate);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
         String line;
-        while ((line = reader.readLine()) != null)
+        while ((line = reader.readLine()) != null) {
             template += line;
-
+        }
         reader.close();
+
         return template;
     }
 
