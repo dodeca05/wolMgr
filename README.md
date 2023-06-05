@@ -9,7 +9,7 @@
 
 ## 요구 사항
 
-- Java 8 이상
+- Java 11 이상
 - Spring Framework
 - Wake-on-LAN 기능을 지원하는 네트워크 환경
 
