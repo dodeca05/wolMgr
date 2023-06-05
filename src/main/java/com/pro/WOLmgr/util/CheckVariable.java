@@ -12,9 +12,7 @@ public class CheckVariable {
     public static CheckVariable getInstance() {
         if(instance == null) {
             synchronized (CheckVariable.class) {
-                if(instance == null) {
-                    instance = new CheckVariable();
-                }
+                if(instance == null) instance = new CheckVariable();
             }
         }
         return instance;

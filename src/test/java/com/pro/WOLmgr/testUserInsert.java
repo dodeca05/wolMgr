@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.EnumSet;
 import java.util.Set;
 
+import static com.pro.WOLmgr.util.Role.ADMIN;
 import static com.pro.WOLmgr.util.Role.USER;
 
 @SpringBootTest
@@ -45,6 +46,22 @@ public class testUserInsert {
                     .macAddress(i+","+i+","+i+","+i)
                     .build();
             deviceService.register(dto);
+        }
+    }
+
+    @Test
+    public void adminInsert(){
+        Set<Role> roles = EnumSet.of(ADMIN);
+        for (int i = 1; i < 8; i++) {
+            UserPrivacyDTO dto = UserPrivacyDTO
+                    .builder()
+                    .userId("admin")
+                    .username("admin123")
+                    .password("1234")
+                    .email("admin"+i+"@naver.com")
+                    .roles(roles)
+                    .build();
+            userService.userCreate(dto);
         }
     }
 }

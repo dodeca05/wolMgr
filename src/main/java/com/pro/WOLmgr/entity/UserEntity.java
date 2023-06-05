@@ -40,13 +40,12 @@ public class UserEntity {
 
     public List<String> getRoleList() {
         List<String> roleList = new ArrayList<>();
-        for (Role role : roles) {
-            roleList.add(role.name());
-        }
+        for (Role role : roles) roleList.add(role.name());
         return roleList;
     }
 
     public void change(UserInfoDTO dto){
+        this.username = dto.getUsername();
         this.userId = dto.getUserId();
         this.email = dto.getEmail();
         this.roles = dto.getRoles();

@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -21,7 +20,7 @@ public class UserPrivacyDTO {
     private String password;
     private String email;
     private Set<Role> roles;
-    private String serviceToken;
+    private List<String> serviceToken;
     private List<String> accessibleDevice;
 
     // DTO를 entity로 변환함
@@ -33,7 +32,7 @@ public class UserPrivacyDTO {
                 .username(dto.getUsername())
                 .email(dto.getEmail())
                 .roles(dto.getRoles())
-                .token(Collections.singletonList(dto.getServiceToken()))
+                .token(dto.getServiceToken())
                 .build();
     }
 }
