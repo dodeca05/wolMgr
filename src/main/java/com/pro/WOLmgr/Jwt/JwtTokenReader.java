@@ -48,6 +48,9 @@ public class JwtTokenReader {
 
         return null;
     }
-
+    public boolean isItAdmin()
+    {
+        return getRole()==Role.ADMIN;
+    }
 
 }
