@@ -48,8 +48,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String jwtHeader = request.getHeader("Authorization");
 
         // "Authorization" 헤더가 없거나 "Bearer "로 시작하지 않으면 다음 필터로 이동합니다.
-        if (jwtHeader == null || !jwtHeader.startsWith("Bearer "))
+        if (jwtHeader == null || !jwtHeader.startsWith("Bearer ")) {
             chain.doFilter(request, response);
+            return;
+        }
 
         // "Authorization" 헤더의 값을 가져와 "Bearer " 부분을 제거하여 JWT 토큰을 추출합니다.
         String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
